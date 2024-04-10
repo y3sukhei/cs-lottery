@@ -1,5 +1,10 @@
+"use client"
 import {Button} from "@nextui-org/button";
+import { useEffect } from "react";
 const DashBoardPage = () => {
+    useEffect(()=>{
+        console.log("hello")
+    },[]);
     return (
         <main className="px-16 py-6">
         <div className="flex flex-col">
