@@ -23,9 +23,9 @@ export default function Home() {
   const duration = 5000;
   let obj = null;
 
-  useEffect(() => {
+  useEffect(async() => {
   // Get Gifts
-      fetch("http://localhost:3000/api", {
+     await fetch("http://localhost:3000/api", {
         method: "GET",
         headers: {
           "Content-Type": "application/json", 
@@ -67,8 +67,6 @@ export default function Home() {
           getRandom(objId + 1)
 
       }
-
-      
     };
 
     window.requestAnimationFrame(step);
