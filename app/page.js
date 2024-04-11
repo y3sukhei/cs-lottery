@@ -24,7 +24,6 @@ export default function Home() {
   let obj = null;
 
   useEffect(() => {
-    console.log(number[4])
   // Get Gifts
       fetch("http://localhost:3000/api", {
         method: "GET",
@@ -111,65 +110,21 @@ export default function Home() {
                <WinnerModal gift={chosenGift} number={number}></WinnerModal>
               </ModalBody>
               <ModalFooter >
-                {/* <Button color="danger" variant="light" onPress={onClose}>
-                  Close
-                </Button> */}
-                {/* <Button color="primary" onPress={onClose}>
-                  Хаах
-                </Button> */}
               </ModalFooter>
             </>
           )}
         </ModalContent>
       </Modal>
-
      <div className="bg-white shadow-blue-500/50 py-12 sm:py-24 w-full rounded-xl shadow-2xl grow">
       <div className="mx-auto  max-w-full px-6 lg:px-8">
-    <dl className="grid grid-cols-1 text-center lg:grid-cols-8">
-      <div className="mx-auto flex max-w-xs flex-col gap-y-4 rounded-lg border-dashed border-4">
-        <dd className="order-first text-3xl font-semibold tracking-tight text-gray-900 sm:text-9xl">
-          <span id="value1">0</span>
-        </dd>
+    <dl className="grid grid-cols-8 text-center">
+      {new Array(number.length).fill(0).map((item,i)=>(
+      <div className="mx-4 flex max-w-ls flex-col gap-y-4 rounded-lg border-dashed border-4" key={i}>
+      <dd className="order-first text-3xl font-semibold tracking-tight text-gray-900 sm:text-9xl">
+        <span id={`value${i+1}`}>{item}</span>
+      </dd>
       </div>
-      <div className="mx-auto flex max-w-xs flex-col gap-y-4 rounded-lg border-dashed border-4">
-        <dd className="order-first text-3xl font-semibold tracking-tight text-gray-900 sm:text-9xl">
-          <span id="value2">0</span>
-        </dd>
-      </div>
-
-      <div className="mx-auto flex max-w-xs flex-col gap-y-4 rounded-lg border-dashed border-4">
-        <dd className="order-first text-3xl font-semibold tracking-tight text-gray-900 sm:text-9xl">
-         <span id="value3">0</span>
-        </dd>
-      </div>
-
-      <div className="mx-auto flex max-w-xs flex-col gap-y-4 rounded-lg border-dashed border-4">
-        <dd className="order-first text-3xl font-semibold tracking-tight text-gray-900 sm:text-9xl">
-        <span id="value4">0</span>
-        </dd>
-      </div>
-
-      <div className="mx-auto flex max-w-xs flex-col gap-y-4 rounded-lg border-dashed border-4">
-        <dd className="order-first text-3xl font-semibold tracking-tight text-gray-900 sm:text-9xl">
-        <span id="value5">0</span>
-        </dd>
-      </div>
-      <div className="mx-auto flex max-w-xs flex-col gap-y-4 rounded-lg border-dashed border-4">
-        <dd className="order-first text-3xl font-semibold tracking-tight text-gray-900 sm:text-9xl">
-        <span id="value6">0</span>
-        </dd>
-      </div>
-      <div className="mx-auto flex max-w-xs flex-col gap-y-4 rounded-lg border-dashed border-4">
-        <dd className="order-first text-3xl font-semibold tracking-tight text-gray-900 sm:text-9xl">
-        <span id="value7">0</span>
-        </dd>
-      </div>
-      <div className="mx-auto flex max-w-xs flex-col gap-y-4 rounded-lg border-dashed border-4">
-        <dd className="order-first text-3xl font-semibold tracking-tight text-gray-900 sm:text-9xl">
-        <span id="value8">0</span>
-        </dd>
-      </div>
-     
+      ))}
     </dl>
   </div>
 </div> 

@@ -1,7 +1,7 @@
 import sqlite3 from "sqlite3";
 import { open, Database } from "sqlite";
 import {NextResponse} from 'next/server'
-import { prisma } from "../libs/prisma";
+import { prisma } from "../../libs/prisma";
 // Let's initialize it as null initially, and we will assign the actual database instance later.
 let db = null;
 
@@ -15,23 +15,21 @@ export async function GET(req, res) {
   //     driver: sqlite3.Database, // Specify the database driver (sqlite3 in this case)
   //   });
   // }
-  const gifts = await prisma.gift.findMany()
+  const participants = await prisma.participant.findMany()
   // Perform a database query to retrieve all items from the "items" table
   // const items = await db.all("SELECT * FROM items");
 
   // Return the items as a JSON response with status 200
-  return NextResponse.json(gifts)
+  return NextResponse.json(participants)
 }
 
 export async function POST(req) {
-  const {name, description, img} = await req.json()
+  const {tickedId} = await req.json()
 
-  const newTask = await prisma.gift.create({
+  const newParticipant = await prisma.participant.create({
     data: {
-      name, 
-      description, 
-      img
+        tickedId
     }
   })
-return NextResponse.json(newTask);
+return NextResponse.json(newParticipant);
 }

@@ -36,33 +36,51 @@ db.serialize(() => {
         console.log("All rows deleted from items");
 
         // Insert new data into the products table
-        const values1 = [
+        const values8 = [
           "Gaming Setup",
           "Intel I5-14400F, Asus Atlas Shark RTX 4060, Thermaltake View 270 TG",
           "/assets/gaming_setup.webp",
         ];
-        const values2 = [
+        const values1 = [
           "Mouse",
           "Logitech G PRO X SUPERLIGHT 2 - White",
           "/assets/mouse.webp",
         ];
 
-        const values3 = [
+        const values2 = [
           "Keyboard",
           "Logitech - G913 LIGHTSPEED",
           "/assets/keyboard.webp",
         ];
 
-        const values4 = [
+        const values3 = [
           "Headset",
           "Logitech G PRO X 2 Lightspeed - White",
           "/assets/headset.webp",
         ];
 
-        const values5 = [
+        const values4 = [
             "Figure",
             "Demon Slayer Kamado Tanjiro Hinokami Kagura",
-            "/assets/figure.png",
+            "/assets/figure.webp",
+          ];
+
+        const values5 = [
+            "MongolZ Jersey",
+            "The MongolZ CS2 багийн өмсгөл.",
+            "/assets/mongolz.webp",
+          ];
+
+          const values6 = [
+            "MongolZ Jersey",
+            "The MongolZ CS2 багийн өмсгөл.",
+            "/assets/mongolz.webp",
+          ];
+
+          const values7 = [
+            "MongolZ Jersey",
+            "The MongolZ CS2 багийн өмсгөл.",
+            "/assets/mongolz.webp",
           ];
 
         const insertSql = `INSERT INTO items(name, description, img) VALUES(?, ?, ?)`;
@@ -100,6 +118,30 @@ db.serialize(() => {
         });
 
         db.run(insertSql, values5, function (err) {
+            if (err) {
+              return console.error(err.message);
+            }
+            const id = this.lastID; // get the id of the last inserted row
+            console.log(`Rows inserted, ID ${id}`);
+          });
+
+          db.run(insertSql, values6, function (err) {
+            if (err) {
+              return console.error(err.message);
+            }
+            const id = this.lastID; // get the id of the last inserted row
+            console.log(`Rows inserted, ID ${id}`);
+          });
+
+          db.run(insertSql, values7, function (err) {
+            if (err) {
+              return console.error(err.message);
+            }
+            const id = this.lastID; // get the id of the last inserted row
+            console.log(`Rows inserted, ID ${id}`);
+          });
+
+          db.run(insertSql, values8, function (err) {
             if (err) {
               return console.error(err.message);
             }
