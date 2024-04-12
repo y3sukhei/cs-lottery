@@ -5,42 +5,73 @@ import {
   CardHeader,
   CardBody,
   Image,
-  Modal, ModalContent, ModalHeader, ModalBody, ModalFooter,  useDisclosure
+  Modal, ModalContent, ModalBody, ModalFooter,  useDisclosure
 } from "@nextui-org/react"; 
 import WinnerModal from "./components/modal";
 import { useEffect, useState } from "react";
 
 export default function Home() {
-  const [number, setNumber] =  useState("86117526");
+  const [number, setNumber] =  useState("00000000000");
   const [gifts, setGifts] = useState([]);
   const [chosenGift, setChosenGift] = useState();
+
+  const [tickets, setTickets] = useState([]);
 
 
   const {isOpen, onOpen, onClose} = useDisclosure();
   const [backdrop, setBackdrop] = useState('blur')
 
+  const [loading , setLoading] = useState(true);
+
 
   const duration = 5000;
   let obj = null;
 
-  useEffect(async() => {
-  // Get Gifts
-     await fetch("http://localhost:3000/api", {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json", 
-        },
-      })
-        .then((res) => res.json()) 
-        .then((data) => setGifts(data));   
+  useEffect(() => {
+
+    fetchGifts();
+    fetchTickets();
+  
   },[])
+
+  const fetchGifts = async () => {
+    
+    await fetch("http://localhost:3000/api", {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json", 
+      },
+    })
+      .then((res) => res.json()) 
+      .then((data) => {        
+        setGifts(data)
+        setChosenGift(data[0]);
+        setLoading(false)
+      }); 
+
+  }
+
+  const fetchTickets = async () => {
+    await fetch("http://localhost:3000/api/ticket", {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json", 
+      },
+    })
+      .then((res) => res.json()) 
+      .then((data) => {
+        setTickets(data)
+        setLoading(false)
+      }
+      ); 
+  }
 
   const getRandom = (objId = 1) => {
     console.log("obj id :", objId)
     if(objId > number.length){
       onOpen()
     }
-    else{
+    else {
 
       obj = document.getElementById(`value${objId}`);
     
@@ -71,39 +102,37 @@ export default function Home() {
 
     window.requestAnimationFrame(step);
   }
-  
+
+  if (loading) {
+    console.log("Loading");
+  }
+  else
   return (
-    <main className="flex min-h-screen flex-col justify-between p-12 rounded-lg gap-y-6">
+
+    <main className="bg-cover bg-[url('/assets/background.webp')]">
+      <div className="flex h-screen flex-col justify-between p-12 rounded-lg gap-y-6 pt-72">
       <div className="flex gap-4">
-      <Button color="primary"  onClick={()=>{getRandom()}}>Эхлэх</Button>
+      
+      <Button color="primary"  onClick={()=>{getRandom()}}>start</Button>
       <Button color="primary"  onClick={()=>{window.location.reload()}}>Refresh</Button>
-      {/* <div id="value">100</div> */}
       </div>
-      <div className="gap-4 grid grid-cols-2 sm:grid-cols-5">
-            {gifts.map((gift,i)=>(
-              <Card className="py-6 px-6" isPressable key={i}  onPress={() => setChosenGift(gift)}>
-                <CardHeader className="pb-0 pt-2 px-4 flex-col items-start">
-                      <p className="text-tiny uppercase font-bold ">Бэлэг {i+1}</p>
-                      <h4 className="font-bold text-large">{gift.name}</h4>
-                      <small className="text-default-500 truncate overfllow-hidden">{gift.description}</small>
-                  </CardHeader>
-                <CardBody className="overflow-visible py-2">
-              <Image isZoomed 
+      <div className="flex flex-col items-center justify-center h-4/6">
+                  <Image 
                      alt="Card background"
-                     className="w-full object-cover rounded-lg"
-                     src={gift.img}
-                     width="100%"
+                     className="object-cover h-14"
+                     src="assets/mongolz_text.png"
                      />
-                </CardBody>
-                </Card>
-            ))}
+                   <Image 
+                     alt="Card background"
+                     className="object-cover h-96"
+                     src="assets/mongolz.png"
+                     />
       </div>
 
       <Modal backdrop={backdrop} isOpen={isOpen} onClose={onClose} size="lg">
         <ModalContent>
           {(onClose) => (
             <>
-              {/* <ModalHeader className="flex flex-col gap-1">Modal Title</ModalHeader> */}
               <ModalBody>
                <WinnerModal gift={chosenGift} number={number}></WinnerModal>
               </ModalBody>
@@ -113,19 +142,20 @@ export default function Home() {
           )}
         </ModalContent>
       </Modal>
-     <div className="bg-white shadow-blue-500/50 py-12 sm:py-24 w-full rounded-xl shadow-2xl grow">
-      <div className="mx-auto  max-w-full px-6 lg:px-8">
-    <dl className="grid grid-cols-8 text-center">
+     <div className=" h-2/6">
+      <div className="mx-auto max-w-full px-6 lg:px-8">
+    <dl className="grid grid-flow-col text-center justify-center">
       {new Array(number.length).fill(0).map((item,i)=>(
-      <div className="mx-4 flex max-w-ls flex-col gap-y-4 rounded-lg border-dashed border-4" key={i}>
-      <dd className="order-first text-3xl font-semibold tracking-tight text-gray-900 sm:text-9xl">
+      <div className="mx-4 flex w-24 flex-col gap-y-4 rounded-lg border-2 border-white bg-white" key={i}>
+      <dd className="order-first text-3xl font-extrabold tracking-tight text-gray-900 sm:text-9xl">
         <span id={`value${i+1}`}>{item}</span>
       </dd>
       </div>
       ))}
     </dl>
-  </div>
-</div> 
+     </div>  
+    </div> 
+    </div>
     </main>
   );
 }

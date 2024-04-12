@@ -1,2 +1,2 @@
 -- SQLite
-DELETE FROM Participant WHERE id=21;
+DELETE FROM Participant
