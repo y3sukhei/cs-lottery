@@ -1,2 +1,2 @@
 -- SQLite
-DELETE FROM Participant
+UPDATE Gift SET ParticipantId = NULL

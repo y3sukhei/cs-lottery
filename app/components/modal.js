@@ -12,7 +12,7 @@ const WinnerModal = (props) => {
             <div className='text-black font text-4xl text-center font-bold'>
                 {props.gift.name}
             </div>
-            <p className='text-sm'>{props.gift.description}</p>
+            {/* <p className='text-sm'>{props.gift.description}</p> */}
                 <Image
                   removeWrapper
                   alt="Relaxing app background"
