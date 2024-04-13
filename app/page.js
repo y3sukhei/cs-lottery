@@ -103,7 +103,6 @@ export default function Home() {
       
       const random = tickets[Math.floor((Math.random() * tickets.length))]
       
-      console.log("winner ticket :", random);
       
       setTickets(tickets.filter((item)=>item.id !== random.id))
       

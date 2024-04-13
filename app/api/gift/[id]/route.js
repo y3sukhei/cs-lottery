@@ -43,7 +43,6 @@ export async function PUT(req, res) {
             participantId:participantId
         }
       })
-      console.log("update gift", updateGift)
   
     return NextResponse.json(updateGift)
 }

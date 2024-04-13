@@ -35,3 +35,7 @@ export async function POST(req) {
   })
 return NextResponse.json(newTask);
 }
+export async function DELETE(req) {
+  const deleteGift = await prisma.gift.deleteMany({});
+  return NextResponse.json(deleteGift);
+}

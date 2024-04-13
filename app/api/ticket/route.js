@@ -33,3 +33,7 @@ export async function POST(req) {
   })
 return NextResponse.json(newParticipant);
 }
+export async function DELETE(req) {
+  const deleteParticipant = await prisma.participant.deleteMany({});
+  return NextResponse.json(deleteParticipant);
+}

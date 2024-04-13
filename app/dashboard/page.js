@@ -10,6 +10,8 @@ const DashBoardPage = () => {
     const [gifts, setGifts] = useState([]);
     const [tickets, setTickets] = useState([]);
 
+    const [isAdding, setIsAdding] = useState(false);
+
 
     const [tickedId, setTickedId] = useState("");
 
@@ -102,7 +104,34 @@ const DashBoardPage = () => {
       )
     }
 
+    const deleteAllParticipant = async () => {
+      const res = await fetch(`/api/ticket/`,{
+        method : 'DELETE',
+        // body: JSON.stringify({tickedId :ticketList[i]}),
+        headers: {
+            'Content-Type': 'application/json'
+          }
+    });
+    const data = await res.json();
+    console.log("adter delete all :", data);
+    setTickets([]);
+    }
+
+    const deleteAllGift = async () => {
+      const res = await fetch(`/api`,{
+        method : 'DELETE',
+        // body: JSON.stringify({tickedId :ticketList[i]}),
+        headers: {
+            'Content-Type': 'application/json'
+          }
+    });
+    const data = await res.json();
+    console.log("after delete all :", data);
+    setGifts([]);
+    }
+
     const addParticipant = async (i) => {
+      setIsAdding(true);
       console.log(i);
         const res = await fetch("/api/ticket",{
             method : 'POST',
@@ -114,17 +143,29 @@ const DashBoardPage = () => {
 
         if(res.ok){
           const data = await res.json();
-          console.log("participant data :", data);
+          // setTickets([...tickets, data]);
+          
 
             if (i < ticketList.length -1) {
               i++;
-              setTimeout(() => {
+              // setTimeout(() => {
                 addParticipant(i);
-              },500)
+              // },500)
             }
-            else console.log('stop2');
+            else {
+
+          setIsAdding(false)
+              
+              console.log('stop2');
+            
+            }
+
         }
-        else  console.log('stop1');
+        else {
+          setIsAdding(false)
+
+          console.log('stop1');
+        } 
     }
 
     const handleGift = async (param,id) => {
@@ -137,7 +178,6 @@ const DashBoardPage = () => {
             }
       });
       const data = await res.json();
-      console.log("adter delete :", data);
 
       setGifts(gifts.filter((item)=> item.id !== data.id))
           
@@ -196,6 +236,9 @@ const DashBoardPage = () => {
               }}>Add</Button>)  : (<Button color="primary" className="max-w-sm" onClick={()=>{
                 updateGift()
             }}>Update</Button>)}
+            <Button color="primary" className="max-w-sm" onClick={()=>{
+                  deleteAllGift()
+              }}>Delete All Gift</Button>
                 
                   </div>
                   <div className="grid grid-cols-6 gap-4 p-4 w-9/12 rounded-lg border-2 border-stone-950 overflow-auto">
@@ -250,14 +293,20 @@ const DashBoardPage = () => {
                         <Button color="primary" className="max-w-sm" onClick={()=>{
                          addParticipant(0);
                         }} >Add Ticket</Button>
+
+                        <Button color="primary" className="max-w-sm" onClick={()=>{
+                         deleteAllParticipant();
+                        }} >Delete All Tickets</Button>
                   </div>
+                  {isAdding ?<div>LOADING</div>:
                   <div className="grid grid-cols-8 gap-4 p-4 w-9/12 rounded-lg border-2 border-stone-950 max-h-[45vh] overflow-auto">
                   {tickets.map((item, i)=>(
-                      <Chip key={i} onClose={() => console.log("close")}>
+                    <Chip key={i} onClose={() => console.log("close")}>
                         {item.tickedId}
                       </Chip>
                     ))}
                   </div>
+                  }
                 </div>
                     </div>
                  </div>
