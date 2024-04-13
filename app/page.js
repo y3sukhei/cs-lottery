@@ -130,7 +130,7 @@ export default function Home() {
       obj = document.getElementById(`value${objId}`);
     
       // setRandom(Math.floor(Math.random() * 99));
-      animateValue(objId, obj, 100, 0, 5000); 
+      animateValue(objId, obj, 100, 0, 2000); 
     }
   }
 
