@@ -36,7 +36,7 @@ export default function Home() {
 
   const fetchGifts = async () => {
     
-    await fetch("http://localhost:3000/api", {
+    await fetch("/api", {
       method: "GET",
       headers: {
         "Content-Type": "application/json", 
@@ -51,7 +51,7 @@ export default function Home() {
   }
 
   const fetchTickets = async () => {
-    await fetch("http://localhost:3000/api/ticket", {
+    await fetch("/api/ticket", {
       method: "GET",
       headers: {
         "Content-Type": "application/json", 
@@ -82,7 +82,7 @@ export default function Home() {
   }
   const saveWinner = async(tickedId) => {
     console.log(chosenGiftIndex)
-    const res = await fetch(`http://localhost:3000/api/gift/${gifts[chosenGiftIndex].id}`,{
+    const res = await fetch(`/api/gift/${gifts[chosenGiftIndex].id}`,{
       method : 'PUT',
       body: JSON.stringify(
       {

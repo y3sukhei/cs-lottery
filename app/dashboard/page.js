@@ -27,7 +27,7 @@ const DashBoardPage = () => {
     },[]);
 
     const fetchGifts = async() => {
-      await fetch("http://localhost:3000/api", {
+      await fetch("/api", {
         method: "GET",
         headers: {
           "Content-Type": "application/json", 
@@ -38,7 +38,7 @@ const DashBoardPage = () => {
           setGifts(data)});
     }
     const fetchTickets = async () => {
-      await fetch("http://localhost:3000/api/ticket", {
+      await fetch("/api/ticket", {
         method: "GET",
         headers: {
           "Content-Type": "application/json", 
@@ -50,7 +50,7 @@ const DashBoardPage = () => {
     }
 
     const addGift = async () => {
-        const res = await fetch("http://localhost:3000/api",{
+        const res = await fetch("/api",{
             method : 'POST',
             body: JSON.stringify({name, description, img}),
             headers: {
@@ -71,7 +71,7 @@ const DashBoardPage = () => {
     }
 
     const updateGift = async () => {
-      const res = await fetch(`http://localhost:3000/api/gift/${updateId}`,{
+      const res = await fetch(`/api/gift/${updateId}`,{
           method : 'PUT',
           body: JSON.stringify({name, description, img}),
           headers: {
@@ -104,7 +104,7 @@ const DashBoardPage = () => {
 
     const addParticipant = async (i) => {
       console.log(i);
-        const res = await fetch("http://localhost:3000/api/ticket",{
+        const res = await fetch("/api/ticket",{
             method : 'POST',
             body: JSON.stringify({tickedId :ticketList[i]}),
             headers: {
@@ -129,7 +129,7 @@ const DashBoardPage = () => {
 
     const handleGift = async (param,id) => {
       if (param == "delete") {
-        const res = await fetch(`http://localhost:3000/api/gift/${id}`,{
+        const res = await fetch(`/api/gift/${id}`,{
           method : 'DELETE',
           // body: JSON.stringify({tickedId :ticketList[i]}),
           headers: {
