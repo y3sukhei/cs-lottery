@@ -171,12 +171,12 @@ export default function Home() {
       
       <Button color="primary"  disabled={chosenGiftIndex < gifts.length ? true :false} onClick={()=>{getWinner()}}>start</Button>
       </div> */}
-      <div className="flex h-screen flex-col justify-between p-12 rounded-lg gap-y-10 pt-72">
+      <div className="flex h-screen flex-col justify-between p-12 rounded-lg gap-y-10 pt-32">
     
       <div className="flex flex-col items-center justify-center h-4/6 gap-y-10">
                   {gifts[chosenGiftIndex]?.img?
                   <>
-                  <div className="text-white text-6xl font-extrabold h-14">
+                  <div className="text-white text-6xl font-extrabold">
                    {gifts[chosenGiftIndex]?.description}
                   </div>
                   {/* <Image 
@@ -205,11 +205,7 @@ export default function Home() {
                 }}>
                   {gifts[chosenGiftIndex]?.description}
                   </a>
-                }
-                {/* <Button onClick={()=>{
-                  getWinner();
-                }}>START</Button> */}
-                  
+                }                  
       </div>
 
       <Modal backdrop={backdrop} isOpen={isOpen} onClose={()=>{
@@ -227,7 +223,7 @@ export default function Home() {
           )}
         </ModalContent>
       </Modal>
-     <div className=" h-2/6">
+     <div className=" h-2/6 mt-20">
       <div className="mx-auto max-w-full px-6 lg:px-8">
     <dl className="grid grid-flow-col text-center justify-center">
       {number.split('').map((item,i)=>(
