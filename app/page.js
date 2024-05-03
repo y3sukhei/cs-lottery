@@ -177,9 +177,9 @@ export default function Home() {
       <div className="flex flex-col items-center justify-center h-4/6 gap-y-10">
                   {gifts[chosenGiftIndex]?.img?
                   <>
-                  <div className="text-white text-6xl font-extrabold">
+                  {/* <div className="text-white text-6xl font-extrabold">
                    {gifts[chosenGiftIndex]?.description}
-                  </div>
+                  </div> */}
                   {/* <Image 
                      alt="Card background"
                      className="object-cover h-14"
