@@ -2,7 +2,8 @@
 import {
  
   Image,
-  Modal, ModalContent, ModalBody, ModalFooter,  useDisclosure
+  Modal, ModalContent, ModalBody, ModalFooter,  useDisclosure,
+  Button
 } from "@nextui-org/react"; 
 import WinnerModal from "./components/modal";
 import { useEffect, useState } from "react";
@@ -184,8 +185,19 @@ export default function Home() {
                      className="object-cover h-14"
                      src={gifts[chosenGiftIndex].description}
                      /> */}
+                     <div className="grid place-items-center h-96">
+                      
+                     <Button className="w-36 h-14" size="lg" color="primary" onClick={()=>{
 
-                   <Image 
+                    if(!disabled) {
+
+                      getWinner()
+                    
+                    }
+                    else console.log("Lottery running!!!")
+                     }}>START</Button>
+                       </div>
+                   {/* <Image 
                    onClick={()=>{
                     
                     if(!disabled) {
@@ -198,7 +210,7 @@ export default function Home() {
                      alt="Card background"
                      className="object-cover h-96"
                      src={gifts[chosenGiftIndex].img}
-                     />
+                     /> */}
                      </>
                 : <a className="text-white text-6xl font-extrabold" onClick={()=>{
                  getWinner()
