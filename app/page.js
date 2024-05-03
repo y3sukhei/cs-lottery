@@ -9,7 +9,7 @@ import { useEffect, useState } from "react";
 
 export default function Home() {
 
-  const [number, setNumber] = useState("00000000000");
+  const [number, setNumber] = useState("00000000");
   const [gifts, setGifts] = useState([]);
   const [chosenGiftIndex, setChosenGiftIndex] = useState(0);
 
@@ -19,6 +19,8 @@ export default function Home() {
   const [backdrop, setBackdrop] = useState('blur')
 
   const [loading , setLoading] = useState(true);
+
+  const [disabled, setDisabled] = useState(false);
 
   let realNumber = "";
   
@@ -77,7 +79,7 @@ export default function Home() {
     else{
       console.log("working right")
     }
-    setNumber("00000000000")
+    setNumber("00000000")
     
   }
   const saveWinner = async(tickedId) => {
@@ -98,6 +100,7 @@ export default function Home() {
   }
   
   const getWinner = () => {
+    setDisabled(true);
     if(gifts.length > 0 && tickets.length > 0 && chosenGiftIndex < gifts.length){
 
       
@@ -121,6 +124,7 @@ export default function Home() {
   
     if(objId > number.length) {
       setNumber(realNumber);
+      setDisabled(false);
     
       onOpen()
     }
@@ -162,24 +166,34 @@ export default function Home() {
   else
   return (
 
-    <main className="bg-cover bg-[url('/assets/background.webp')]">
+    <main className=" bg-cover bg-[url('/assets/background.png')]">
         {/* <div className="flex gap-4">
       
       <Button color="primary"  disabled={chosenGiftIndex < gifts.length ? true :false} onClick={()=>{getWinner()}}>start</Button>
       </div> */}
-      <div className="flex h-screen flex-col justify-between p-12 rounded-lg gap-y-6 pt-72">
+      <div className="flex h-screen flex-col justify-between p-12 rounded-lg gap-y-10 pt-72">
     
-      <div className="flex flex-col items-center justify-center h-4/6">
+      <div className="flex flex-col items-center justify-center h-4/6 gap-y-10">
                   {gifts[chosenGiftIndex]?.img?
                   <>
-                  <Image 
+                  <div className="text-white text-6xl font-extrabold h-14">
+                   {gifts[chosenGiftIndex]?.description}
+                  </div>
+                  {/* <Image 
                      alt="Card background"
                      className="object-cover h-14"
                      src={gifts[chosenGiftIndex].description}
-                     />
+                     /> */}
+
                    <Image 
                    onClick={()=>{
-                    getWinner()
+                    
+                    if(!disabled) {
+
+                      getWinner()
+                    
+                    }
+                    else console.log("Lottery running!!!")
                    }}
                      alt="Card background"
                      className="object-cover h-96"

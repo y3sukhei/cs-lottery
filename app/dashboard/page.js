@@ -297,6 +297,9 @@ const DashBoardPage = () => {
                         <Button color="primary" className="max-w-sm" onClick={()=>{
                          deleteAllParticipant();
                         }} >Delete All Tickets</Button>
+                        <div>
+                          {tickets.length}
+                        </div>
                   </div>
                   {isAdding ?<div>LOADING</div>:
                   <div className="grid grid-cols-8 gap-4 p-4 w-9/12 rounded-lg border-2 border-stone-950 max-h-[45vh] overflow-auto">
