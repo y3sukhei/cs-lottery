@@ -172,52 +172,43 @@ export default function Home() {
       
       <Button color="primary"  disabled={chosenGiftIndex < gifts.length ? true :false} onClick={()=>{getWinner()}}>start</Button>
       </div> */}
-      <div className="flex h-screen flex-col justify-between p-12 rounded-lg gap-y-10 pt-32">
+      <div className="flex h-screen flex-col p-12 rounded-lg gap-y-5 pt-32">
     
-      <div className="flex flex-col items-center justify-center h-4/6 gap-y-10">
+      <div className="flex flex-col items-center justify-center mt-20 h-full gap-y-5">
                   {gifts[chosenGiftIndex]?.img?
                   <>
-                  {/* <div className="text-white text-6xl font-extrabold">
+                    <div className="text-white text-6xl font-extrabold">
                    {gifts[chosenGiftIndex]?.description}
-                  </div> */}
-                  {/* <Image 
-                     alt="Card background"
-                     className="object-cover h-14"
-                     src={gifts[chosenGiftIndex].description}
-                     /> */}
-                     <div className="grid place-items-center h-96">
-                      
-                     <Button className="w-36 h-14" size="lg" color="primary" onClick={()=>{
-
-                    if(!disabled) {
-
-                      getWinner()
-                    
-                    }
-                    else console.log("Lottery running!!!")
-                     }}>START</Button>
-                       </div>
-                   {/* <Image 
-                   onClick={()=>{
-                    
-                    if(!disabled) {
-
-                      getWinner()
-                    
-                    }
-                    else console.log("Lottery running!!!")
-                   }}
+                  </div>
+                  
+                   <Image 
+                     onClick={()=>{ if(!disabled) {getWinner()} else {console.log("Lottery running")} }}
                      alt="Card background"
                      className="object-cover h-96"
                      src={gifts[chosenGiftIndex].img}
-                     /> */}
+                
+                     /> 
+                     
                      </>
-                : <a className="text-white text-6xl font-extrabold" onClick={()=>{
-                 getWinner()
+                : <a className="text-white text-6xl font-extrabold mb-72" onClick={()=>{
+                  if(!disabled) {getWinner()} else {console.log("Lottery running")}
                 }}>
                   {gifts[chosenGiftIndex]?.description}
                   </a>
-                }                  
+                }       
+                <div className="mx-auto max-w-full px-6 lg:px-8">
+    <dl className="grid grid-flow-col text-center justify-center">
+      {number.split('').map((item,i)=>(
+      <div className="mx-4 flex w-32 flex-col gap-y-4 rounded-lg border-2 border-white bg-white" key={i}>
+      <dd className="order-first text-3xl font-extrabold tracking-tight text-gray-900 sm:text-9xl">
+        <span id={`value${i+1}`}>
+          {item}
+          </span>
+      </dd>
+      </div>
+      ))}
+    </dl>
+     </div>           
       </div>
 
       <Modal backdrop={backdrop} isOpen={isOpen} onClose={()=>{
@@ -235,21 +226,9 @@ export default function Home() {
           )}
         </ModalContent>
       </Modal>
-     <div className=" h-2/6 mt-20">
-      <div className="mx-auto max-w-full px-6 lg:px-8">
-    <dl className="grid grid-flow-col text-center justify-center">
-      {number.split('').map((item,i)=>(
-      <div className="mx-4 flex w-32 flex-col gap-y-4 rounded-lg border-2 border-white bg-white" key={i}>
-      <dd className="order-first text-3xl font-extrabold tracking-tight text-gray-900 sm:text-9xl">
-        <span id={`value${i+1}`}>
-          {item}
-          </span>
-      </dd>
-      </div>
-      ))}
-    </dl>
-     </div>  
-    </div> 
+     {/* <div className=" h-1/6 mt-0">
+        
+    </div>  */}
     </div>
     </main>
   );

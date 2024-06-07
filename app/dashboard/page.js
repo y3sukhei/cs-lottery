@@ -12,8 +12,9 @@ const DashBoardPage = () => {
 
     const [isAdding, setIsAdding] = useState(false);
 
+    const [percent , setPercent] = useState(0);
 
-    const [tickedId, setTickedId] = useState("");
+
 
     // ticketList for POST
     const [ticketList, setTicketList] = useState([]);
@@ -143,7 +144,13 @@ const DashBoardPage = () => {
 
         if(res.ok){
           const data = await res.json();
-          // setTickets([...tickets, data]);
+          console.log("added ticket :", data);
+        
+
+            setPercent(prevPercent => parseInt(prevPercent + (100 / ticketList.length)));
+          
+          
+           setTickets(prevTickets => [...prevTickets,data]);
           
 
             if (i < ticketList.length -1) {
@@ -154,9 +161,13 @@ const DashBoardPage = () => {
             }
             else {
 
-          setIsAdding(false)
+              setTimeout(() => {  
+                setIsAdding(false)
+                setPercent(0);
+
               
-              console.log('stop2');
+                console.log('stop2');},1000)
+         
             
             }
 
@@ -277,8 +288,9 @@ const DashBoardPage = () => {
                 </div>
                 <div className="flex flex-col h-auto gap-4 rounded-lg px-6 py-8 ring-1 ring-slate-900/5 shadow-xl">
                 <div className="flex flex-row gap-2 ">
+                  
                     <div className="flex flex-col gap-4 w-3/12">
-                        <div >Insert Participant </div>
+                        <div >Insert Participant </div> 
                         <Input
                           id="title"
                           onChange={(e)=>{
@@ -297,11 +309,16 @@ const DashBoardPage = () => {
                         <Button color="primary" className="max-w-sm" onClick={()=>{
                          deleteAllParticipant();
                         }} >Delete All Tickets</Button>
+                        {
+                          isAdding?<div className="text-lg">LOADING {percent} %</div>:
+
                         <div>
                           {tickets.length}
                         </div>
+                        }
+                        
                   </div>
-                  {isAdding ?<div>LOADING</div>:
+                 
                   <div className="grid grid-cols-8 gap-4 p-4 w-9/12 rounded-lg border-2 border-stone-950 max-h-[45vh] overflow-auto">
                   {tickets.map((item, i)=>(
                     <Chip key={i} onClose={() => console.log("close")}>
@@ -309,7 +326,7 @@ const DashBoardPage = () => {
                       </Chip>
                     ))}
                   </div>
-                  }
+                  
                 </div>
                     </div>
                  </div>

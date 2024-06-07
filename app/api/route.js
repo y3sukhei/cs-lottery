@@ -15,7 +15,11 @@ export async function GET(req, res) {
   //     driver: sqlite3.Database, // Specify the database driver (sqlite3 in this case)
   //   });
   // }
-  const gifts = await prisma.gift.findMany()
+  const gifts = await prisma.gift.findMany({ orderBy: [
+    {
+      id: 'asc',
+    },
+  ],})
   // Perform a database query to retrieve all items from the "items" table
   // const items = await db.all("SELECT * FROM items");
 
