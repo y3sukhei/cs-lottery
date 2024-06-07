@@ -10,7 +10,7 @@ import { useEffect, useState } from "react";
 
 export default function Home() {
 
-  const [number, setNumber] = useState("00000000");
+  const [number, setNumber] = useState("00000000000");
   const [gifts, setGifts] = useState([]);
   const [chosenGiftIndex, setChosenGiftIndex] = useState(0);
 
@@ -80,7 +80,7 @@ export default function Home() {
     else{
       console.log("working right")
     }
-    setNumber("00000000")
+    setNumber("00000000000")
     
   }
   const saveWinner = async(tickedId) => {
