@@ -167,7 +167,7 @@ export default function Home() {
   else
   return (
 
-    <main className=" bg-cover bg-[url('/assets/background.png')]">
+    <main className=" bg-cover bg-[url('/assets/bvrtgel.jpg')]">
         {/* <div className="flex gap-4">
       
       <Button color="primary"  disabled={chosenGiftIndex < gifts.length ? true :false} onClick={()=>{getWinner()}}>start</Button>
