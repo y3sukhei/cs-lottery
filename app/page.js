@@ -7,10 +7,11 @@ import {
 } from "@nextui-org/react";
 import WinnerModal from "./components/modal";
 import { useEffect, useState } from "react";
+import JSConfetti from 'js-confetti'
 
 export default function Home() {
 
-  const [number, setNumber] = useState("00000000000");
+  const [number, setNumber] = useState("        ");
   const [gifts, setGifts] = useState([]);
   const [chosenGiftIndex, setChosenGiftIndex] = useState(0);
 
@@ -23,6 +24,11 @@ export default function Home() {
 
   const [disabled, setDisabled] = useState(false);
 
+  const [isNext, setIsNext] = useState(false);
+
+
+  const [winnerCount, setWinnerCount] = useState(1);
+
   let realNumber = "";
 
   const duration = 5000;
@@ -34,8 +40,33 @@ export default function Home() {
     fetchGifts();
     fetchTickets();
 
+    if (gifts.length > 0) {
+
+    }
+
+
+
+
+
 
   }, [])
+  function countDuplicatesAtIndex(index, key, list) {
+    // Ensure the index is valid.
+    if (index < 0 || index >= list.length) {
+      console.error("Invalid index");
+      return 0;
+    }
+
+    // Get the value from the object at the given index.
+    const valueToCheck = list[index][key];
+
+    // Count how many times that value appears in the list.
+    const count = list.reduce((acc, obj) => {
+      return obj[key] === valueToCheck ? acc + 1 : acc;
+    }, 0);
+
+    return count;
+  }
 
   const fetchGifts = async () => {
 
@@ -48,6 +79,8 @@ export default function Home() {
       .then((res) => res.json())
       .then((data) => {
         setGifts(data);
+        setWinnerCount(countDuplicatesAtIndex(chosenGiftIndex, 'img', data))
+        console.log("gifts :", data);
         setLoading(false);
       });
 
@@ -68,7 +101,6 @@ export default function Home() {
       );
   }
   const handleClose = () => {
-    // number = "00000000000";
 
     console.log("tickets :", tickets);
     onClose()
@@ -76,11 +108,12 @@ export default function Home() {
       console.log("chosenGiftIndex :", chosenGiftIndex);
 
       setChosenGiftIndex(chosenGiftIndex + 1);
+      setIsNext(false);
     }
     else {
       console.log("working right")
     }
-    setNumber("00000000000")
+    setNumber("        ")
 
   }
   const saveWinner = async (tickedId) => {
@@ -127,14 +160,19 @@ export default function Home() {
       setNumber(realNumber);
       setDisabled(false);
 
-      onOpen()
+      const jsConfetti = new JSConfetti()
+      // console.log("props :", props)
+      jsConfetti.addConfetti()
+      setIsNext(true);
+
+      // onOpen()
     }
     else {
 
       obj = document.getElementById(`value${objId}`);
 
       // setRandom(Math.floor(Math.random() * 99));
-      animateValue(objId, obj, 100, 0, 3000);
+      animateValue(objId, obj, 100, 0, 1000);
     }
   }
 
@@ -144,7 +182,7 @@ export default function Home() {
     const step = (timestamp) => {
       if (!startTimestamp) startTimestamp = timestamp;
       const progress = Math.min((timestamp - startTimestamp) / duration, 1);
-      obj.innerHTML = Math.floor(Math.random() * 9);
+      // obj.innerHTML = Math.floor(Math.random() * 9);
 
       // Math.floor(progress * (end - start) + start);
       if (progress < 1) {
@@ -172,22 +210,38 @@ export default function Home() {
       
       <Button color="primary"  disabled={chosenGiftIndex < gifts.length ? true :false} onClick={()=>{getWinner()}}>start</Button>
       </div> */}
-        <div className="flex h-screen flex-col p-12 rounded-lg gap-y-5 pt-32">
+        <div className="flex  h-screen flex-col p-12 rounded-lg gap-y-5 pt-32">
 
-          <div className="flex flex-row items-center justify-center mt-20 h-full gap-y-5">
+          <div className="flex my-40 h-full gap-y-5">
             {/* {gifts[chosenGiftIndex]?.img ?
               <>
                 <div className="text-white text-6xl font-extrabold">
                   {gifts[chosenGiftIndex]?.description}
                 </div> */}
 
-            <Image
-              onClick={() => { if (!disabled) { getWinner() } else { console.log("Lottery running") } }}
-              alt="Card background"
-              className="object-cover h-96"
-              src={gifts[chosenGiftIndex].img}
+            <div className="w-1/2 p-4 flex items-center justify-center">
+              <div className="flex flex-col items-center justify-center">
+                {/* <h1 className="text-white text-4xl font-extrabold mb-4">Winner Count: {winnerCount}</h1> */}
+                <h1 className="text-white text-4xl font-extrabold mb-4">{chosenGiftIndex + 1}.{gifts[chosenGiftIndex]?.name}</h1>
+                <Image
+                  // onClick={() => { if (!disabled) { getWinner() } else { console.log("Lottery running") } }}
+                  alt="Card background"
+                  className="object-cover h-96 "
+                  src={gifts[chosenGiftIndex]?.img}
 
-            />
+                />
+                <div className="flex gap-4">
+
+
+
+                  {isNext ?
+                    <Button size="lg" color="success" className=" mt-4 bg-gradient-to-tr from-pink-500 to-yellow-500 text-white shadow-lg" onClick={() => { handleClose() }}>ҮРГЭЛЖЛҮҮЛЭХ</Button>
+                    : <Button size="lg" color="success" className=" mt-4 bg-gradient-to-tr from-pink-500 to-yellow-500 text-white shadow-lg" disabled={disabled} onClick={() => { getWinner() }}>ЭХЛЭХ</Button>
+                  }
+                </div>
+
+              </div>
+            </div>
 
             {/* </>
               : <a className="text-white text-6xl font-extrabold mb-72" onClick={() => {
@@ -196,11 +250,13 @@ export default function Home() {
                 {gifts[chosenGiftIndex]?.description}
               </a>
             } */}
-            <div className="mx-auto max-w-full px-6 lg:px-8">
-              <dl className="grid grid-flow-col text-center justify-center">
+
+            <div className="w-1/2 mx-auto px-6 lg:px-8 flex flex-col items-center justify-center gap-y-14">
+              {/* {Array.from({ length: winnerCount }, (_, i) => ( */}
+              <dl key={0} className="grid grid-flow-col text-center justify-center">
                 {number.split('').map((item, i) => (
-                  <div className="mx-4 flex w-32 flex-col gap-y-4 rounded-lg border-2 border-white bg-white" key={i}>
-                    <dd className="order-first text-3xl font-extrabold tracking-tight text-gray-900 sm:text-9xl">
+                  <div className="mx-2 flex items-center justify-center size-16 flex-col gap-y-4 rounded-full border-2 border-white bg-white" key={i}>
+                    <dd className="order-first text-5xl font-bold tracking-tight text-gray-900 sm:text-5xl">
                       <span id={`value${i + 1}`}>
                         {item}
                       </span>
@@ -208,6 +264,15 @@ export default function Home() {
                   </div>
                 ))}
               </dl>
+
+              {/* ))} */}
+
+
+
+
+
+
+
             </div>
           </div>
 
