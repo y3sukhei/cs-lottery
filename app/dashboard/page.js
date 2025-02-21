@@ -1,6 +1,7 @@
 "use client"
 import {Button, Input,Chip,Card,CardFooter,Image, CardHeader} from "@nextui-org/react";
 import { useEffect, useState } from "react";
+import Papa from "papaparse";
 
 const DashBoardPage = () => {
     const [name, setName] = useState("");
@@ -21,6 +22,9 @@ const DashBoardPage = () => {
 
     const [isUpdate, setIsUpdate] = useState(false) 
     const [updateId, setUpdateId] = useState(0) 
+    
+    // CSV
+    const [csvData, setCsvData] = useState([]);
 
     useEffect(() => {
 
@@ -136,7 +140,9 @@ const DashBoardPage = () => {
       console.log(i);
         const res = await fetch("/api/ticket",{
             method : 'POST',
-            body: JSON.stringify({tickedId :ticketList[i]}),
+            body: JSON.stringify( 
+              {tickedId :ticketList[i]} 
+            ),
             headers: {
                 'Content-Type': 'application/json'
               }
@@ -208,6 +214,71 @@ const DashBoardPage = () => {
       }
 
     }
+    const toSubs = async () => {
+      csvData.forEach((value) => {
+          console.log(value.sub_id);
+              setSubs(oldArray => [...oldArray,value.sub_id]);
+
+
+        });
+      
+  }
+  async function addParticipants() {
+    for (const data of csvData) {
+      try {
+        const response = await fetch("/api/ticket",{
+          method : 'POST',
+          body: JSON.stringify( 
+            {tickedId :data.phone_no} 
+          ),
+          headers: {
+              'Content-Type': 'application/json'
+            }
+      })
+       
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        const responseData = await response.json();
+        setTickets(prevTickets => [...prevTickets,responseData]);
+
+       
+      } catch (error) {
+        console.error(`Error fetching:`, error);
+        // results.push(null);
+      }
+    }
+  }
+
+
+    const handleCsvFileUpload = (e) => {
+      const file = e.target.files[0];
+      if (file) {
+        if (file.type === "text/csv") {
+          Papa.parse(file, {
+            header: true, // If the CSV has headers
+            skipEmptyLines: true,
+            complete: (result) => {
+              console.log("result :", result);
+             
+              
+
+              setCsvData(result.data); // Parsed data
+              
+              // toSubs();
+              
+              // setError("");
+            },
+            error: (err) => {
+              console.error("Error parsing CSV:", err);
+              setError("Error parsing CSV file.");
+            },
+          });
+        } else {
+          setError("Please upload a valid CSV file.");
+        }
+      }
+  };
 
 
     return (
@@ -290,20 +361,21 @@ const DashBoardPage = () => {
                 <div className="flex flex-row gap-2 ">
                   
                     <div className="flex flex-col gap-4 w-3/12">
-                        <div >Insert Participant </div> 
-                        <Input
+                        <div >Insert Participants </div> 
+                        <input
                           id="title"
-                          onChange={(e)=>{
-                            makeList(e.target.value);
+                          onChange={(e) => {
+                            handleCsvFileUpload(e);
+                            // makeList(e.target.value);
                             // setTickedId(e.target.value);
                           }}
-                          isRequired
-                          type="text"
-                          label="Enter Code"
+                          type="file"
+                          accept=".csv"
+                          // label="Enter CSV File"
                           className="max-w-sm"
                           />
                         <Button color="primary" className="max-w-sm" onClick={()=>{
-                         addParticipant(0);
+                         addParticipants();
                         }} >Add Ticket</Button>
 
                         <Button color="primary" className="max-w-sm" onClick={()=>{
