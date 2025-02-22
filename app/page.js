@@ -205,7 +205,7 @@ export default function Home() {
   else
     return (
 
-      <main className=" bg-fit bg-[url('/assets/looktv_background.webp')]">
+      <main className="bg-cover bg-[url('/assets/looktv_background.webp')]">
         {/* <div className="flex gap-4">
       
       <Button color="primary"  disabled={chosenGiftIndex < gifts.length ? true :false} onClick={()=>{getWinner()}}>start</Button>
