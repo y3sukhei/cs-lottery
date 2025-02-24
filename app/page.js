@@ -14,7 +14,7 @@ export default function Home() {
 
   const [number, setNumber] = useState("        ");
   const [gifts, setGifts] = useState([]);
-  const [chosenGiftIndex, setChosenGiftIndex] = useState(2);
+  const [chosenGiftIndex, setChosenGiftIndex] = useState(0);
 
   const [tickets, setTickets] = useState([]);
 
