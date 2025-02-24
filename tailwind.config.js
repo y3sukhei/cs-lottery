@@ -1,5 +1,5 @@
 /** @type {import('tailwindcss').Config} */
-const {nextui} = require("@nextui-org/react");
+const { nextui } = require("@nextui-org/react");
 module.exports = {
   content: [
     "./pages/**/*.{js,ts,jsx,tsx,mdx}",
@@ -9,11 +9,15 @@ module.exports = {
   ],
   theme: {
     extend: {
-    
+      fontFamily: {
+        raleway: ['Raleway', 'sans-serif'],
+      },
+      sans: ['Raleway', 'ui-sans-serif', 'system-ui'],
+
     },
   },
-  darkMode:"class",
-  plugins: [ nextui({
+  darkMode: "class",
+  plugins: [nextui({
     prefix: "nextui", // prefix for themes variables
     addCommonColors: false, // override common colors (e.g. "blue", "green", "pink").
     defaultTheme: "light", // default theme from the themes object
