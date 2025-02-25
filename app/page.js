@@ -179,7 +179,7 @@ export default function Home() {
       obj = document.getElementById(`value${objId}`);
 
       // setRandom(Math.floor(Math.random() * 99));
-      animateValue(objId, obj, 100, 0, 500);
+      animateValue(objId, obj, 100, 0, 1000);
     }
   }
 
@@ -244,7 +244,7 @@ export default function Home() {
               <div className="w-1/2 p-4 flex items-center justify-center">
                 <div className="flex flex-col items-center justify-center">
                   {/* <h1 className="text-white text-4xl font-extrabold mb-4">Winner Count: {winnerCount}</h1> */}
-                  <h1 className="text-white text-4xl font-sans font-bold mb-4">{chosenGiftIndex + 1}.{gifts[chosenGiftIndex]?.name}</h1>
+                  {/* <h1 className="text-white text-4xl font-sans font-bold mb-4">{chosenGiftIndex + 1}.{gifts[chosenGiftIndex]?.name}</h1> */}
                   <Image
                     alt="Card background"
                     className="object-fit h-80 "
@@ -256,8 +256,8 @@ export default function Home() {
 
 
                     {isNext ?
-                      <Button size="lg" className=" mt-10 bg-[#00b7b1] text-white  font-sans text-3xl shadow-lg" onClick={() => { handleClose() }}>ҮРГЭЛЖЛҮҮЛЭХ</Button>
-                      : <Button size="lg" color="success" className=" mt-10 bg-[#00b7b1] text-white font-sans text-3xl shadow-lg " disabled={disabled} onClick={() => { getWinner() }}>ЭХЛЭХ</Button>
+                      <Button size="lg" className=" mt-10 bg-[#00b7b1] text-white  font-sans text-xl shadow-lg" onClick={() => { handleClose() }}>ҮРГЭЛЖЛҮҮЛЭХ</Button>
+                      : <Button size="lg" color="success" className=" mt-10 bg-[#00b7b1] text-white font-sans text-xl shadow-lg " disabled={disabled} onClick={() => { getWinner() }}>ЭХЛЭХ</Button>
                     }
                   </div>
 
