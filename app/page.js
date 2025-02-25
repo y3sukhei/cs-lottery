@@ -179,7 +179,7 @@ export default function Home() {
       obj = document.getElementById(`value${objId}`);
 
       // setRandom(Math.floor(Math.random() * 99));
-      animateValue(objId, obj, 100, 0, 1000);
+      animateValue(objId, obj, 100, 0, 500);
     }
   }
 
@@ -256,8 +256,8 @@ export default function Home() {
 
 
                     {isNext ?
-                      <Button size="lg" className=" mt-4 bg-[#00b7b1] text-white  font-sans text-3xl shadow-lg" onClick={() => { handleClose() }}>ҮРГЭЛЖЛҮҮЛЭХ</Button>
-                      : <Button size="lg" color="success" className=" mt-4 bg-[#00b7b1] text-white font-sans text-3xl shadow-lg " disabled={disabled} onClick={() => { getWinner() }}>ЭХЛЭХ</Button>
+                      <Button size="lg" className=" mt-10 bg-[#00b7b1] text-white  font-sans text-3xl shadow-lg" onClick={() => { handleClose() }}>ҮРГЭЛЖЛҮҮЛЭХ</Button>
+                      : <Button size="lg" color="success" className=" mt-10 bg-[#00b7b1] text-white font-sans text-3xl shadow-lg " disabled={disabled} onClick={() => { getWinner() }}>ЭХЛЭХ</Button>
                     }
                   </div>
 
