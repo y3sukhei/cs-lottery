@@ -8,7 +8,7 @@ import {
 import WinnerModal from "./components/modal";
 import { useEffect, useState } from "react";
 import JSConfetti from 'js-confetti'
-import { loadGetInitialProps } from "next/dist/shared/lib/utils";
+import { useRouter } from 'next/navigation'
 
 export default function Home() {
 
@@ -27,16 +27,14 @@ export default function Home() {
 
   const [isNext, setIsNext] = useState(false);
 
-
   const [winnerCount, setWinnerCount] = useState(1);
-
-  // const [manyNumbers, setManyNumbers] = useState(Array(winnerCount).fill(" "));
-
 
   let realNumber = "";
 
   const duration = 5000;
   let obj = null;
+
+  const router = useRouter()
 
   useEffect(() => {
     console.log("refresh")
@@ -48,14 +46,6 @@ export default function Home() {
 
     }
   }, [])
-
-  // useEffect(() => {
-  //   console.log("chosen use effect")
-  //   setWinnerCount(countDuplicatesAtIndex(chosenGiftIndex, 'img', gifts))
-  //   console.log("many winners :", manyNumbers)
-
-  // }, [chosenGiftIndex])
-
 
   function countDuplicatesAtIndex(index, key, list) {
     // Ensure the index is valid.
@@ -118,6 +108,7 @@ export default function Home() {
       setIsNext(false);
     }
     else {
+      router.push("/winners")
       console.log("working right")
     }
     setNumber("        ")
@@ -139,8 +130,8 @@ export default function Home() {
       }
     })
   }
-
   const getWinner = () => {
+
     setDisabled(true);
     if (gifts.length > 0 && tickets.length > 0 && chosenGiftIndex < gifts.length) {
 
