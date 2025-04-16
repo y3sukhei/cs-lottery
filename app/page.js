@@ -9,6 +9,7 @@ import WinnerModal from "./components/modal";
 import { useEffect, useState } from "react";
 import JSConfetti from 'js-confetti'
 import { useRouter } from 'next/navigation'
+import { useRef } from 'react';
 
 export default function Home() {
 
@@ -17,7 +18,7 @@ export default function Home() {
   const [chosenGiftIndex, setChosenGiftIndex] = useState(0);
   const [winnerIndex, setWinnerIndex] = useState(0);
 
-  const [tickets, setTickets] = useState([]);
+  // const [tickets, setTickets] = useState([]);
 
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [backdrop, setBackdrop] = useState('blur')
@@ -31,6 +32,7 @@ export default function Home() {
   // const [winnerCount, setWinnerCount] = useState(1);
 
   let realNumber = "";
+  const ticketsConst = useRef([]);
 
   const duration = 5000;
   let obj = null;
@@ -93,14 +95,13 @@ export default function Home() {
     })
       .then((res) => res.json())
       .then((data) => {
-        setTickets(data)
+        ticketsConst.current = data;
         setLoading(false)
       }
       );
   }
   const handleClose = () => {
 
-    console.log("tickets :", tickets);
     onClose()
     if (chosenGiftIndex < gifts.length - 1) {
       console.log("chosenGiftIndex :", chosenGiftIndex);
@@ -131,16 +132,19 @@ export default function Home() {
       }
     })
   }
-  const getWinner = () => {
+  const getWinner = (winnerCountIndex = 0) => {
+    console.log("tickets var :", ticketsConst);
 
     setDisabled(true);
-    if (gifts.length > 0 && tickets.length > 0 && chosenGiftIndex < gifts.length) {
+    if (gifts.length > 0 && ticketsConst.current.length > 0 && chosenGiftIndex < gifts.length) {
 
 
-      const random = tickets[Math.floor((Math.random() * tickets.length))]
+      const random = ticketsConst.current[Math.floor((Math.random() * ticketsConst.current.length))]
+
+      console.log("tickets :", ticketsConst);
+      ticketsConst.current = ticketsConst.current.filter((item) => item.id !== random.id)
 
 
-      setTickets(tickets.filter((item) => item.id !== random.id))
 
       realNumber = random.tickedId;
       // setNumber(random.tickedId);
@@ -149,33 +153,43 @@ export default function Home() {
       saveWinner(random.id);
 
       setTimeout(() => {
-        getRandom();
+        getRandom(0, winnerCountIndex);
       }, 1000)
     } else alert("Error")
   }
-  const getRandom = (objId = 0) => {
 
-    if (objId > number.length) {
-      setNumber(realNumber);
+  const getRandom = (objId = 0, winnerCountIndex) => {
+    console.log("winner Count Index :", winnerCountIndex);
+
+    if (objId >= number.length) {
+      // setNumber(realNumber);
       setDisabled(false);
 
       const jsConfetti = new JSConfetti()
       // console.log("props :", props)
       jsConfetti.addConfetti()
-      setIsNext(true);
+
+      if (winnerCountIndex < gifts[chosenGiftIndex].winnerCount - 1) {
+        console.log("working")
+        getWinner(winnerCountIndex + 1);
+      } else {
+
+        console.log("duussan next ")
+        setIsNext(true);
+      }
 
       // onOpen()
     }
     else {
 
-      obj = document.getElementById(`value${winnerIndex}${objId}`);
+      obj = document.getElementById(`value${winnerCountIndex}${objId}`);
 
       // setRandom(Math.floor(Math.random() * 99));
-      animateValue(objId, obj, 100, 0, 1000);
+      animateValue(objId, obj, 100, 0, 1000, winnerCountIndex);
     }
   }
 
-  async function animateValue(objId, obj, start, end, duration) {
+  async function animateValue(objId, obj, start, end, duration, winnerCountIndex) {
     //  let obj = document.getElementById(`value${objId}`);
     let startTimestamp = null;
     const step = (timestamp) => {
@@ -187,11 +201,11 @@ export default function Home() {
       if (progress < 1) {
         window.requestAnimationFrame(step);
       }
-      else if (objId <= realNumber.length) {
-        console.log("objId :", objId);
+      else if (objId < realNumber.length) {
+
         obj.innerHTML = realNumber[objId];
 
-        getRandom(objId + 1)
+        getRandom(objId + 1, winnerCountIndex)
 
       }
     };
@@ -250,7 +264,11 @@ export default function Home() {
 
                     {isNext ?
                       <Button size="lg" className=" mt-10 bg-[#00b7b1] text-white  font-sans text-xl shadow-lg" onClick={() => { handleClose() }}>ҮРГЭЛЖЛҮҮЛЭХ</Button>
-                      : <Button size="lg" color="success" className=" mt-10 bg-[#00b7b1] text-white font-sans text-xl shadow-lg " disabled={disabled} onClick={() => { getWinner() }}>ЭХЛЭХ</Button>
+                      : <Button size="lg" color="success" className=" mt-10 bg-[#00b7b1] text-white font-sans text-xl shadow-lg " disabled={disabled}
+                        onClick={() => { getWinner(0) }}
+
+                      >
+                        ЭХЛЭХ</Button>
                     }
                   </div>
 
