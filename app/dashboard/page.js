@@ -6,6 +6,7 @@ import Papa from "papaparse";
 const DashBoardPage = () => {
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
+  const [winnerCount, setWinnerCount] = useState(0);
   const [img, setImg] = useState("");
 
   const [gifts, setGifts] = useState([]);
@@ -62,7 +63,7 @@ const DashBoardPage = () => {
   const addGift = async () => {
     const res = await fetch("/api", {
       method: 'POST',
-      body: JSON.stringify({ name, description, img }),
+      body: JSON.stringify({ name, description, img, winnerCount }),
       headers: {
         'Content-Type': 'application/json'
       }
@@ -73,6 +74,7 @@ const DashBoardPage = () => {
       setUpdateId(0);
       setName("")
       setDescription("")
+      setWinnerCount(0)
       setImg("")
       setGifts([...gifts, data])
 
@@ -83,7 +85,7 @@ const DashBoardPage = () => {
   const updateGift = async () => {
     const res = await fetch(`/api/gift/${updateId}`, {
       method: 'PUT',
-      body: JSON.stringify({ name, description, img }),
+      body: JSON.stringify({ name, description, img, winnerCount }),
       headers: {
         'Content-Type': 'application/json'
       }
@@ -92,6 +94,7 @@ const DashBoardPage = () => {
       setUpdateId(0);
       setName("")
       setDescription("")
+      setWinnerCount(0)
       setImg("")
 
       setIsUpdate(false);
@@ -210,6 +213,7 @@ const DashBoardPage = () => {
 
       setName(data[0].name)
       setDescription(data[0].description)
+      setWinnerCount(data[0].winnerCount)
       setImg(data[0].img)
 
       if (!isUpdate) {
@@ -307,6 +311,14 @@ const DashBoardPage = () => {
                 label="Gift Description"
                 className="max-w-sm"
                 value={description}
+              />
+              <Input
+                onChange={(e) => setWinnerCount(parseInt(e.target.value))}
+                isRequired
+                type="number"
+                label="Winner Count"
+                className="max-w-sm"
+                value={winnerCount}
               />
               <Input
                 onChange={(e) => setImg(e.target.value)}

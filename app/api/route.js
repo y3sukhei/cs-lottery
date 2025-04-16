@@ -20,7 +20,8 @@ export async function GET(req, res) {
       {
         id: 'asc',
       },
-    ], include: { participant: true }
+    ],
+    // include: { participant: true }
 
   },
 
@@ -34,13 +35,14 @@ export async function GET(req, res) {
 }
 
 export async function POST(req) {
-  const { name, description, img } = await req.json()
+  const { name, description, img, winnerCount } = await req.json()
 
   const newTask = await prisma.gift.create({
     data: {
       name,
       description,
-      img
+      img,
+      winnerCount
     }
   })
   return NextResponse.json(newTask);

@@ -20,9 +20,10 @@ model Gift {
 
   img String
 
-  participant Participant? @relation(fields: [participantId], references: [id])
+  winnerCount Int
 
-  participantId Int? @unique
+  participants Participant[]
+
 }
 
 model Participant {
@@ -30,5 +31,7 @@ model Participant {
 
   tickedId String @unique
 
-  gift Gift? 
+  gift Gift? @relation(fields: [giftId], references: [id])
+
+  giftId Int? 
 }

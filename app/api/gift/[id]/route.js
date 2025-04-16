@@ -16,34 +16,34 @@ export async function GET(req, res) {
 }
 
 export async function DELETE(req, res) {
-    const giftId = req.url.split("/").pop();
-  
-    const deleteGift = await prisma.gift.delete({
-        where: {
-          id: parseInt(giftId),
-        },
-      })
-      console.log("delete gift", deleteGift)
-  
-    return NextResponse.json(deleteGift)
+  const giftId = req.url.split("/").pop();
+
+  const deleteGift = await prisma.gift.delete({
+    where: {
+      id: parseInt(giftId),
+    },
+  })
+  console.log("delete gift", deleteGift)
+
+  return NextResponse.json(deleteGift)
 }
 
 export async function PUT(req, res) {
-    const giftId = req.url.split("/").pop();
-    const {name, description, img, participantId} = await req.json()
+  const giftId = req.url.split("/").pop();
+  const { name, description, img, winnerCount } = await req.json()
 
-    const updateGift = await prisma.gift.update({
-        where: {
-          id: parseInt(giftId),
-        },
-        data:{
-            name: name,
-            description:description,
-            img:img,
-            participantId:participantId
-        }
-      })
-  
-    return NextResponse.json(updateGift)
+  const updateGift = await prisma.gift.update({
+    where: {
+      id: parseInt(giftId),
+    },
+    data: {
+      name: name,
+      description: description,
+      img: img,
+      winnerCount: winnerCount
+    }
+  })
+
+  return NextResponse.json(updateGift)
 }
 

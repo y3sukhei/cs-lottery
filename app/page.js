@@ -15,6 +15,7 @@ export default function Home() {
   const [number, setNumber] = useState("        ");
   const [gifts, setGifts] = useState([]);
   const [chosenGiftIndex, setChosenGiftIndex] = useState(0);
+  const [winnerIndex, setWinnerIndex] = useState(0);
 
   const [tickets, setTickets] = useState([]);
 
@@ -27,7 +28,7 @@ export default function Home() {
 
   const [isNext, setIsNext] = useState(false);
 
-  const [winnerCount, setWinnerCount] = useState(1);
+  // const [winnerCount, setWinnerCount] = useState(1);
 
   let realNumber = "";
 
@@ -76,7 +77,7 @@ export default function Home() {
       .then((res) => res.json())
       .then((data) => {
         setGifts(data);
-        setWinnerCount(countDuplicatesAtIndex(chosenGiftIndex, 'img', data))
+        // setWinnerCount(countDuplicatesAtIndex(chosenGiftIndex, 'img', data))
         console.log("gifts :", data);
         setLoading(false);
       });
@@ -116,7 +117,7 @@ export default function Home() {
   }
   const saveWinner = async (tickedId) => {
     console.log(chosenGiftIndex)
-    const res = await fetch(`/api/gift/${gifts[chosenGiftIndex].id}`, {
+    const res = await fetch(`/api/participant/${gifts[chosenGiftIndex].id}`, {
       method: 'PUT',
       body: JSON.stringify(
         {
@@ -152,7 +153,7 @@ export default function Home() {
       }, 1000)
     } else alert("Error")
   }
-  const getRandom = (objId = 1) => {
+  const getRandom = (objId = 0) => {
 
     if (objId > number.length) {
       setNumber(realNumber);
@@ -167,7 +168,7 @@ export default function Home() {
     }
     else {
 
-      obj = document.getElementById(`value${objId}`);
+      obj = document.getElementById(`value${winnerIndex}${objId}`);
 
       // setRandom(Math.floor(Math.random() * 99));
       animateValue(objId, obj, 100, 0, 1000);
@@ -187,7 +188,8 @@ export default function Home() {
         window.requestAnimationFrame(step);
       }
       else if (objId <= realNumber.length) {
-        obj.innerHTML = realNumber[objId - 1];
+        console.log("objId :", objId);
+        obj.innerHTML = realNumber[objId];
 
         getRandom(objId + 1)
 
@@ -220,7 +222,7 @@ export default function Home() {
 
 
               />
-              <h1 className="text-[#00b7b1] text-6xl font-sans font-bold ">MARCH GIVEAWAY</h1>
+              <h1 className="text-[#00b7b1] text-6xl font-sans font-bold ">APRIL GIVEAWAY</h1>
             </div>
 
             {/* {gifts[chosenGiftIndex]?.img ?
@@ -264,20 +266,19 @@ export default function Home() {
             } */}
 
               <div className="w-1/2 mx-auto px-6 lg:px-8 flex flex-col items-center justify-center gap-y-14">
-                {/* {Array.from({ length: winnerCount }, (_, i) => ( */}
-                <dl key={0} className="grid grid-flow-col text-center justify-center">
-                  {number.split('').map((item, i) => (
-                    <div className="mx-2 flex items-center justify-center size-16 flex-col gap-y-4 rounded-full border-2 border-white bg-white" key={i}>
-                      <dd className="order-first text-5xl font-bold tracking-tight text-gray-900 sm:text-5xl">
-                        <span id={`value${i + 1}`}>
-                          {item}
-                        </span>
-                      </dd>
-                    </div>
-                  ))}
-                </dl>
-
-                {/* ))} */}
+                {Array.from({ length: gifts[chosenGiftIndex]?.winnerCount }, (_, winnerIndex) => (
+                  <dl key={winnerIndex} className="grid grid-flow-col text-center justify-center">
+                    {number.split('').map((item, numberIndex) => (
+                      <div className="mx-2 flex items-center justify-center size-16 flex-col gap-y-4 rounded-full border-2 border-white bg-white" key={numberIndex}>
+                        <dd className="order-first text-5xl font-bold tracking-tight text-gray-900 sm:text-5xl">
+                          <span id={`value${winnerIndex}${numberIndex}`}>
+                            {item}
+                          </span>
+                        </dd>
+                      </div>
+                    ))}
+                  </dl>
+                ))}
 
 
 
