@@ -101,8 +101,9 @@ export default function Home() {
       );
   }
   const handleClose = () => {
+    setNumber("--------")
 
-    onClose()
+    // onClose()
     if (chosenGiftIndex < gifts.length - 1) {
       console.log("chosenGiftIndex :", chosenGiftIndex);
 
@@ -113,7 +114,7 @@ export default function Home() {
       router.push("/winners")
       console.log("working right")
     }
-    setNumber("        ")
+
 
   }
   const saveWinner = async (tickedId) => {
@@ -135,8 +136,9 @@ export default function Home() {
   const getWinner = (winnerCountIndex = 0) => {
     console.log("tickets var :", ticketsConst);
 
-    setDisabled(true);
+
     if (gifts.length > 0 && ticketsConst.current.length > 0 && chosenGiftIndex < gifts.length) {
+      setDisabled(true);
 
 
       const random = ticketsConst.current[Math.floor((Math.random() * ticketsConst.current.length))]
