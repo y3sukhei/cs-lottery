@@ -111,7 +111,7 @@ export default function Home() {
       setIsNext(false);
     }
     else {
-      router.push("/winners")
+      // router.push("/winners")
       console.log("working right")
     }
 
@@ -190,7 +190,7 @@ export default function Home() {
       obj = document.getElementById(`value${winnerCountIndex}${objId}`);
 
       // setRandom(Math.floor(Math.random() * 99));
-      animateValue(objId, obj, 100, 0, 1000, winnerCountIndex);
+      animateValue(objId, obj, 100, 0, 800, winnerCountIndex);
     }
   }
 
