@@ -21,7 +21,7 @@ export async function GET(req, res) {
         id: 'asc',
       },
     ],
-    // include: { participant: true }
+    include: { participants: true }
 
   },
 

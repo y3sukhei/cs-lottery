@@ -66,20 +66,26 @@ const WinnersPage = () => {
                             className="object-cover"
                             src={item.img}
                         />
-                        {item.participant ?
-                            <div className="flex gap-2">
-                                {
-                                    item.participant.tickedId.split('').map((item, i) => (
-                                        <div className="flex flex-col items-center justify-center rounded-full bg-white size-8" key={i}>
-                                            <dd className="order-first font-bold tracking-tight text-gray-900 text-2xl">
-                                                <span id={`value${i + 1}`}>
-                                                    {item}
-                                                </span>
-                                            </dd>
-                                        </div>
-                                    ))
-                                }
-                            </div>
+                        {item.participants.length > 0 ?
+
+                            item.participants.map((participant, i) => (
+                                <div key={i} className="flex gap-2">
+                                    {
+                                        participant.tickedId.split('').map((item, i) => (
+                                            <div className="flex flex-col items-center justify-center rounded-full bg-white size-8" key={i}>
+                                                <dd className="order-first font-bold tracking-tight text-gray-900 text-2xl">
+                                                    <span id={`value${i + 1}`}>
+                                                        {item}
+                                                    </span>
+                                                </dd>
+                                            </div>
+                                        ))
+                                    }
+                                </div>
+
+                            ))
+
+
                             : <h1 className="text-white"> no winner </h1>}
                     </div>
                 ))}
