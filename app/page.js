@@ -241,7 +241,7 @@ export default function Home() {
 
 
               />
-              <h1 className="text-[#00b7b1] text-6xl font-sans font-bold ">APRIL GIVEAWAY</h1>
+              <h1 className="text-[#00b7b1] text-6xl font-sans font-bold ">MAY GIVEAWAY</h1>
             </div>
 
             {/* {gifts[chosenGiftIndex]?.img ?
