@@ -119,7 +119,7 @@ export default function Home() {
 
 
   }
-  const saveWinner = async (tickedId) => {
+  const saveWinner = async (ticketId) => {
     console.log(chosenGiftIndex)
     const res = await fetch(`/api/participant/${gifts[chosenGiftIndex].id}`, {
       method: 'PUT',
@@ -128,7 +128,7 @@ export default function Home() {
           // name: gifts[chosenGiftIndex].name, 
           // description: gifts[chosenGiftIndex].name, 
           // img :gifts[chosenGiftIndex].img,
-          participantId: tickedId
+          participantId: ticketId
         }),
       headers: {
         'Content-Type': 'application/json'
@@ -151,7 +151,7 @@ export default function Home() {
 
 
 
-      realNumber = random.tickedId;
+      realNumber = random.ticketId;
       // setNumber(random.tickedId);
 
       // save in db
