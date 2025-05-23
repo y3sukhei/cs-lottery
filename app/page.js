@@ -13,7 +13,7 @@ import { useRef } from 'react';
 
 export default function Home() {
 
-  const [number, setNumber] = useState("--------");
+  const [number, setNumber] = useState("-----------");
   const [gifts, setGifts] = useState([]);
   const [chosenGiftIndex, setChosenGiftIndex] = useState(0);
   const [winnerIndex, setWinnerIndex] = useState(0);
@@ -115,7 +115,7 @@ export default function Home() {
       console.log("working right")
     }
 
-    setNumber("--------")
+    setNumber("-----------")
 
 
   }
@@ -137,7 +137,7 @@ export default function Home() {
   }
   const getWinner = (winnerCountIndex = 0) => {
     console.log("tickets var :", ticketsConst);
-    setNumber("        ")
+    setNumber("           ")
 
 
     if (gifts.length > 0 && ticketsConst.current.length > 0 && chosenGiftIndex < gifts.length) {
@@ -229,19 +229,30 @@ export default function Home() {
       
       <Button color="primary"  disabled={chosenGiftIndex < gifts.length ? true :false} onClick={()=>{getWinner()}}>start</Button>
       </div> */}
-        <div className="flex flex-col bg-[#0f123f] h-screen  p-12 gap-y-5 pt-12">
+        <div className="flex flex-col bg-[url(/assets/mlbb/background.jpg)] h-screen p-12 gap-y-5 pt-12">
 
           <div className="flex flex-col items-center justify-between h-full gap-y-5">
-            <div className="flex flex-col items-center justify-center gap-y-4">
+            <div className="flex flex-row justify-between w-full">
               <Image
                 // onClick={() => { if (!disabled) { getWinner() } else { console.log("Lottery running") } }}
                 alt="Card background"
-                className="object-cover h-24 "
-                src="assets/looktv_logo.png"
-
-
+                className="w-52 object-contain rounded-none"
+                src="assets/mlbb/esn.png"
               />
-              <h1 className="text-[#00b7b1] text-6xl font-sans font-bold ">MAY GIVEAWAY</h1>
+              <Image
+                // onClick={() => { if (!disabled) { getWinner() } else { console.log("Lottery running") } }}
+                alt="Card background"
+                className="w-54 object-contain mt-16 rounded-none"
+                src="assets/mlbb/msc_x_mwi.png"
+              />
+              <Image
+                // onClick={() => { if (!disabled) { getWinner() } else { console.log("Lottery running") } }}
+                alt="Card background"
+                className="w-52 object-contain rounded-none"
+                src="assets/mlbb/mlbb.png"
+              />
+              {/* <h1 className="text-[#00b7b1] text-6xl font-sans font-bold ">MAY GIVEAWAY</h1> */}
+
             </div>
 
             {/* {gifts[chosenGiftIndex]?.img ?
@@ -249,27 +260,21 @@ export default function Home() {
                 <div className="text-white text-6xl font-extrabold">
                   {gifts[chosenGiftIndex]?.description}
                 </div> */}
-            <div className="flex flex-row items-center justify-center gap-x-4">
-
-
-
-              <div className="w-1/2 p-4 flex items-center justify-center">
+            <div className="flex flex-row w-full items-center justify-center gap-x-0">
+              <div className="w-1/3 p-4 flex items-start justify-start">
                 <div className="flex flex-col items-center justify-center">
                   {/* <h1 className="text-white text-4xl font-extrabold mb-4">Winner Count: {winnerCount}</h1> */}
                   {/* <h1 className="text-white text-4xl font-sans font-bold mb-4">{chosenGiftIndex + 1}.{gifts[chosenGiftIndex]?.name}</h1> */}
                   <Image
                     alt="Card background"
-                    className="object-fit h-80 "
+                    className="object-fit h-28"
                     src={gifts[chosenGiftIndex]?.img}
 
                   />
                   <div className="flex gap-4">
-
-
-
                     {isNext ?
-                      <Button size="lg" className=" mt-10 bg-[#00b7b1] text-white  font-sans text-xl shadow-lg" onClick={() => { handleClose() }}>ҮРГЭЛЖЛҮҮЛЭХ</Button>
-                      : <Button size="lg" color="success" className=" mt-10 bg-[#00b7b1] text-white font-sans text-xl shadow-lg " disabled={disabled}
+                      <Button size="lg" className=" mt-10 bg-[#4884dd] text-white  font-sans text-xl shadow-lg" onClick={() => { handleClose() }}>ҮРГЭЛЖЛҮҮЛЭХ</Button>
+                      : <Button size="lg" color="success" className=" mt-10 bg-[#4884dd] text-white font-sans text-xl shadow-lg " disabled={disabled}
                         onClick={() => { getWinner(0) }}
 
                       >
@@ -288,7 +293,7 @@ export default function Home() {
               </a>
             } */}
 
-              <div className="w-1/2 mx-auto px-6 lg:px-8 flex flex-col items-center justify-center gap-y-14">
+              <div className="w-auto mx-auto px-6 lg:px-8 flex flex-col items-start justify-start gap-y-14">
                 {Array.from({ length: gifts[chosenGiftIndex]?.winnerCount }, (_, winnerIndex) => (
                   <dl key={winnerIndex} className="grid grid-flow-col text-center justify-center">
                     {number.split('').map((item, numberIndex) => (
@@ -302,19 +307,18 @@ export default function Home() {
                     ))}
                   </dl>
                 ))}
-
-
-
-
-
-
-
               </div>
             </div>
-            <div className="flex flex-row gap-x-2 items-center justify-center">
+            <div className="flex flex-row items-center justify-center">
+              <Image
+                // onClick={() => { if (!disabled) { getWinner() } else { console.log("Lottery running") } }}
+                alt="Card background"
+                className="w-full object-contain rounded-none"
+                src="assets/mlbb/sponsore.png"
+              />
 
-              <h1 className="text-white text-4xl font-sans ">Бэлгийн эзэн тодруулах</h1>
-              <h1 className="bg-[#00b7b1] rounded-lg px-2 py-1 text-white text-4xl font-sans ">LIVE</h1>
+              {/* <h1 className="text-white text-4xl font-sans ">Бэлгийн эзэн тодруулах</h1>
+              <h1 className="bg-[#00b7b1] rounded-lg px-2 py-1 text-white text-4xl font-sans ">LIVE</h1> */}
 
             </div>
           </div>
