@@ -29,7 +29,7 @@ model Gift {
 model Participant {
   id Int @id @default(autoincrement())
 
-  tickedId String @unique
+  ticketId String @unique
 
   gift Gift? @relation(fields: [giftId], references: [id])
 

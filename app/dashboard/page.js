@@ -27,6 +27,8 @@ const DashBoardPage = () => {
   // CSV
   const [csvData, setCsvData] = useState([]);
 
+  let BATCH_SIZE = 1000;
+
   useEffect(() => {
 
     fetchGifts();
@@ -227,17 +229,19 @@ const DashBoardPage = () => {
       console.log(value.sub_id);
       setSubs(oldArray => [...oldArray, value.sub_id]);
 
-
     });
 
   }
   async function addParticipants() {
-    for (const data of csvData) {
+
+    for (let i = 0; i < csvData.length; i += BATCH_SIZE) {
+      const batch = csvData.slice(i, i + BATCH_SIZE);
       try {
-        const response = await fetch("/api/ticket", {
+        const response = await fetch("/api/ticket/batch", {
           method: 'POST',
           body: JSON.stringify(
-            { tickedId: data.phone_no }
+            { ticketList: batch }
+
           ),
           headers: {
             'Content-Type': 'application/json'
@@ -248,14 +252,45 @@ const DashBoardPage = () => {
           throw new Error(`HTTP error! status: ${response.status}`);
         }
         const responseData = await response.json();
-        setTickets(prevTickets => [...prevTickets, responseData]);
+        console.log("responseData :", responseData);
+        setTickets(prevTickets => [...prevTickets, ...responseData]);
 
 
       } catch (error) {
         console.error(`Error fetching:`, error);
         // results.push(null);
       }
+
+
     }
+
+
+
+
+    // for (const data of csvData) {
+    //   try {
+    //     const response = await fetch("/api/ticket", {
+    //       method: 'POST',
+    //       body: JSON.stringify(
+    //         { tickedId: data.phone_no }
+    //       ),
+    //       headers: {
+    //         'Content-Type': 'application/json'
+    //       }
+    //     })
+
+    //     if (!response.ok) {
+    //       throw new Error(`HTTP error! status: ${response.status}`);
+    //     }
+    //     const responseData = await response.json();
+    //     setTickets(prevTickets => [...prevTickets, responseData]);
+
+
+    //   } catch (error) {
+    //     console.error(`Error fetching:`, error);
+    //     // results.push(null);
+    //   }
+    // }
   }
 
 
@@ -410,7 +445,7 @@ const DashBoardPage = () => {
             <div className="grid grid-cols-8 gap-4 p-4 w-9/12 rounded-lg border-2 border-stone-950 max-h-[45vh] overflow-auto">
               {tickets.map((item, i) => (
                 <Chip key={i} onClose={() => console.log("close")}>
-                  {item.tickedId}
+                  {item.ticketId}
                 </Chip>
               ))}
             </div>

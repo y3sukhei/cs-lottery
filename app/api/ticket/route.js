@@ -1,6 +1,6 @@
 import sqlite3 from "sqlite3";
 import { open, Database } from "sqlite";
-import {NextResponse} from 'next/server'
+import { NextResponse } from 'next/server'
 import { prisma } from "../../libs/prisma";
 // Let's initialize it as null initially, and we will assign the actual database instance later.
 let db = null;
@@ -23,16 +23,6 @@ export async function GET(req, res) {
   return NextResponse.json(participants)
 }
 
-export async function POST(req) {
-  const {tickedId} = await req.json()
-
-  const newParticipant = await prisma.participant.create({
-    data: {
-        tickedId
-    }
-  })
-return NextResponse.json(newParticipant);
-}
 export async function DELETE(req) {
   const deleteParticipant = await prisma.participant.deleteMany({});
   return NextResponse.json(deleteParticipant);
