@@ -260,7 +260,7 @@ export default function Home() {
                 <div className="text-white text-6xl font-extrabold">
                   {gifts[chosenGiftIndex]?.description}
                 </div> */}
-            <div className="flex flex-row w-full items-center justify-center gap-x-0">
+            <div className="flex flex-row w-auto items-center justify-center gap-x-14">
               <div className="w-1/3 p-4 flex items-start justify-start">
                 <div className="flex flex-col items-center justify-center">
                   {/* <h1 className="text-white text-4xl font-extrabold mb-4">Winner Count: {winnerCount}</h1> */}
