@@ -13,7 +13,7 @@ import { useRef } from 'react';
 
 export default function Home() {
 
-  const [number, setNumber] = useState("--------");
+  const [number, setNumber] = useState("---------");
   const [gifts, setGifts] = useState([]);
   const [chosenGiftIndex, setChosenGiftIndex] = useState(0);
   const [winnerIndex, setWinnerIndex] = useState(0);
@@ -115,7 +115,7 @@ export default function Home() {
       console.log("working right")
     }
 
-    setNumber("--------")
+    setNumber("---------")
 
 
   }
@@ -137,7 +137,7 @@ export default function Home() {
   }
   const getWinner = (winnerCountIndex = 0) => {
     console.log("tickets var :", ticketsConst);
-    setNumber("        ")
+    setNumber("         ")
 
 
     if (gifts.length > 0 && ticketsConst.current.length > 0 && chosenGiftIndex < gifts.length) {
@@ -166,7 +166,7 @@ export default function Home() {
   const getRandom = (objId = 0, winnerCountIndex) => {
     console.log("winner Count Index :", winnerCountIndex);
 
-    if (objId >= number.length) {
+    if (objId >= realNumber.length) {
       // setNumber(realNumber);
       setDisabled(false);
 
@@ -195,6 +195,7 @@ export default function Home() {
   }
 
   async function animateValue(objId, obj, start, end, duration, winnerCountIndex) {
+    console.log("real number :", realNumber);
     //  let obj = document.getElementById(`value${objId}`);
     let startTimestamp = null;
     const step = (timestamp) => {
@@ -229,7 +230,7 @@ export default function Home() {
     
     <Button color="primary"  disabled={chosenGiftIndex < gifts.length ? true :false} onClick={()=>{getWinner()}}>start</Button>
     </div> */}
-      <div className="flex flex-col bg-[#0f123f] h-screen  p-12 gap-y-5 pt-12">
+      <div className="flex flex-col bg-[url(/assets/tlou/tlou.webp)] h-screen  p-12 gap-y-5 pt-12">
 
         <div className="flex flex-col items-center justify-between h-full gap-y-5">
           <div className="flex flex-col items-center justify-center gap-y-4">
@@ -237,11 +238,13 @@ export default function Home() {
               // onClick={() => { if (!disabled) { getWinner() } else { console.log("Lottery running") } }}
               alt="Card background"
               className="object-cover h-20 "
-              src="assets/looktv_logo.png"
+              src="assets/tlou/tlou_title.png"
 
 
             />
-            <h1 className="text-[#00b7b1] text-5xl font-sans font-bold ">JUNE GIVEAWAY</h1>
+            <h1 className="text-white text-5xl font-sans font-bold ">OFFICIAL MERCHANDISE</h1>
+            <h1 className="bg-[#47be37] rounded-lg px-2 py-1 text-white text-5xl font-sans">GIVEAWAY</h1>
+            {/* <h1 className="text-[#47be37] text-5xl font-sans font-bold ">JUNE GIVEAWAY</h1> */}
           </div>
 
           {/* {gifts[chosenGiftIndex]?.img ?
@@ -268,8 +271,8 @@ export default function Home() {
 
 
                   {isNext ?
-                    <Button size="lg" className=" mt-10 bg-[#00b7b1] text-white  font-sans text-xl shadow-lg" onClick={() => { handleClose() }}>ҮРГЭЛЖЛҮҮЛЭХ</Button>
-                    : <Button size="lg" color="success" className=" mt-10 bg-[#00b7b1] text-white font-sans text-xl shadow-lg " disabled={disabled}
+                    <Button size="lg" className=" mt-10 bg-[#47be37] text-white  font-sans text-xl shadow-lg" onClick={() => { handleClose() }}>ҮРГЭЛЖЛҮҮЛЭХ</Button>
+                    : <Button size="lg" color="success" className=" mt-10 bg-[#47be37] text-white font-sans text-xl shadow-lg " disabled={disabled}
                       onClick={() => { getWinner(0) }}
 
                     >
@@ -314,7 +317,7 @@ export default function Home() {
           <div className="flex flex-row gap-x-2 items-center justify-center">
 
             <h1 className="text-white text-4xl font-sans ">Бэлгийн эзэн тодруулах</h1>
-            <h1 className="bg-[#00b7b1] rounded-lg px-2 py-1 text-white text-4xl font-sans ">LIVE</h1>
+            <h1 className="bg-[#47be37] rounded-lg px-2 py-1 text-white text-4xl font-sans ">LIVE</h1>
 
           </div>
         </div>
