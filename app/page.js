@@ -230,21 +230,23 @@ export default function Home() {
     
     <Button color="primary"  disabled={chosenGiftIndex < gifts.length ? true :false} onClick={()=>{getWinner()}}>start</Button>
     </div> */}
-      <div className="flex flex-col bg-[#0f123f] h-screen  p-12 gap-y-5 pt-12">
+      <div className="flex flex-col  bg-[url('/assets/minecraft/minecraft.png')] h-screen p-12 gap-y-5 pt-12 bg-cover">
+      <div class="absolute inset-0 bg-black/50 ">
 
-        <div className="flex flex-col items-center justify-between h-full gap-y-5">
+        <div className="flex flex-col items-center justify-between h-full gap-y-5  py-20">
           <div className="flex flex-col items-center justify-center gap-y-4">
-            <Image
+            {/* <Image
               // onClick={() => { if (!disabled) { getWinner() } else { console.log("Lottery running") } }}
               alt="Card background"
               className="object-cover h-20 "
               src="assets/looktv_logo.png"
 
 
-            />
+            /> */}
             {/* <h1 className="text-white text-5xl font-sans font-bold ">OFFICIAL MERCHANDISE</h1>
             <h1 className="bg-[#47be37] rounded-lg px-2 py-1 text-white text-5xl font-sans">GIVEAWAY</h1> */}
-            <h1 className="text-[#00b7b1] text-5xl font-sans font-bold ">JULY GIVEAWAY</h1>
+            <h1 className="text-[#46C800] text-5xl font-sans font-bold ">A Minecraft Movie</h1>
+            <h1 className="bg-[#47be37] rounded-lg px-2 py-1 text-white text-5xl font-sans">GIVEAWAY</h1>
           </div>
 
           {/* {gifts[chosenGiftIndex]?.img ?
@@ -262,7 +264,7 @@ export default function Home() {
                 <h1 className="text-white text-4xl font-sans font-bold mb-4">{gifts[chosenGiftIndex]?.name}</h1>
                 <Image
                   alt="Card background"
-                  className="object-fit h-80 "
+                  className="object-fit h-80 bg-white rounded-xl shadow-lg p-5"
                   src={gifts[chosenGiftIndex]?.img}
 
                 />
@@ -271,8 +273,8 @@ export default function Home() {
 
 
                   {isNext ?
-                    <Button size="lg" className=" mt-10 bg-[#00b7b1] text-white  font-sans text-xl shadow-lg" onClick={() => { handleClose() }}>ҮРГЭЛЖЛҮҮЛЭХ</Button>
-                    : <Button size="lg" color="success" className=" mt-10 bg-[#00b7b1] text-white font-sans text-xl shadow-lg " disabled={disabled}
+                    <Button size="lg" className=" mt-10 bg-[#46C800] text-white  font-sans text-xl shadow-lg" onClick={() => { handleClose() }}>ҮРГЭЛЖЛҮҮЛЭХ</Button>
+                    : <Button size="lg" color="success" className=" mt-10 bg-[#46C800] text-white font-sans text-xl shadow-lg " disabled={disabled}
                       onClick={() => { getWinner(0) }}
 
                     >
@@ -317,7 +319,7 @@ export default function Home() {
           <div className="flex flex-row gap-x-2 items-center justify-center">
 
             <h1 className="text-white text-4xl font-sans ">Бэлгийн эзэн тодруулах</h1>
-            <h1 className="bg-[#00b7b1] rounded-lg px-2 py-1 text-white text-4xl font-sans ">LIVE</h1>
+            <h1 className="bg-[#46C800] rounded-lg px-2 py-1 text-white text-4xl font-sans ">LIVE</h1>
 
           </div>
         </div>
@@ -340,6 +342,7 @@ export default function Home() {
         {/* <div className=" h-1/6 mt-0">
       
   </div>  */}
+    </div>
       </div>
     </main>
   );
