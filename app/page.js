@@ -13,7 +13,7 @@ import { useRef } from 'react';
 
 export default function Home() {
 
-  const [number, setNumber] = useState("--------");
+  const [number, setNumber] = useState("-----------");
   const [gifts, setGifts] = useState([]);
   const [chosenGiftIndex, setChosenGiftIndex] = useState(0);
   const [winnerIndex, setWinnerIndex] = useState(0);
@@ -115,7 +115,7 @@ export default function Home() {
       console.log("working right")
     }
 
-    setNumber("--------")
+    setNumber("-----------")
 
 
   }
@@ -137,7 +137,7 @@ export default function Home() {
   }
   const getWinner = (winnerCountIndex = 0) => {
     console.log("tickets var :", ticketsConst);
-    setNumber("        ")
+    setNumber("           ")
 
 
     if (gifts.length > 0 && ticketsConst.current.length > 0 && chosenGiftIndex < gifts.length) {
@@ -223,19 +223,19 @@ export default function Home() {
     console.log("Loading");
   }
   else
-  return (
+    return (
 
-    <main className="">
-      {/* <div className="flex gap-4">
+      <main className="">
+        {/* <div className="flex gap-4">
     
     <Button color="primary"  disabled={chosenGiftIndex < gifts.length ? true :false} onClick={()=>{getWinner()}}>start</Button>
     </div> */}
-      <div className="flex flex-col  bg-[url('/assets/minecraft/minecraft.png')] h-screen p-12 gap-y-5 pt-12 bg-cover">
-      <div class="absolute inset-0 bg-black/50 ">
+        <div className="flex flex-col  bg-[url('/assets/blast/bg.webp')] h-screen p-12 gap-y-5 pt-12 bg-cover">
+          <div class="absolute inset-0">
 
-        <div className="flex flex-col items-center justify-between h-full gap-y-5  py-20">
-          <div className="flex flex-col items-center justify-center gap-y-4">
-            {/* <Image
+            <div className="flex flex-col items-center justify-between h-full gap-y-5  py-20">
+              <div className="flex flex-row items-center justify-between gap-y-4 w-full px-10">
+                {/* <Image
               // onClick={() => { if (!disabled) { getWinner() } else { console.log("Lottery running") } }}
               alt="Card background"
               className="object-cover h-20 "
@@ -243,49 +243,63 @@ export default function Home() {
 
 
             /> */}
-            {/* <h1 className="text-white text-5xl font-sans font-bold ">OFFICIAL MERCHANDISE</h1>
+                {/* <h1 className="text-white text-5xl font-sans font-bold ">OFFICIAL MERCHANDISE</h1>
             <h1 className="bg-[#47be37] rounded-lg px-2 py-1 text-white text-5xl font-sans">GIVEAWAY</h1> */}
-            <h1 className="text-[#46C800] text-5xl font-sans font-bold ">A Minecraft Movie</h1>
-            <h1 className="bg-[#47be37] rounded-lg px-2 py-1 text-white text-5xl font-sans">GIVEAWAY</h1>
-          </div>
+                <Image
+                  alt="Card background"
+                  className="object-fit h-20"
+                  src='assets/blast/esn.png'
+                  radius="none"
 
-          {/* {gifts[chosenGiftIndex]?.img ?
+                />
+                {/* <h1 className="text-[#46C800] text-5xl font-sans font-bold ">A Minecraft Movie</h1> */}
+                <Image
+                  alt="Card background"
+                  className="object-fit h-24"
+                  src='assets/blast/title.png'
+                  radius="none"
+
+                />
+                {/* <h1 className="bg-[#47be37] rounded-lg px-2 py-1 text-white text-5xl font-sans">GIVEAWAY</h1> */}
+              </div>
+
+              {/* {gifts[chosenGiftIndex]?.img ?
             <>
               <div className="text-white text-6xl font-extrabold">
                 {gifts[chosenGiftIndex]?.description}
               </div> */}
-          <div className="flex flex-row items-center justify-center gap-x-4">
+              <div className="flex flex-row items-center justify-center gap-x-4">
 
 
 
-            <div className="w-1/2 p-4 flex items-center justify-center">
-              <div className="flex flex-col items-center justify-center">
-                {/* <h1 className="text-white text-4xl font-extrabold mb-4">Winner Count: {winnerCount}</h1> */}
-                <h1 className="text-white text-4xl font-sans font-bold mb-4">{gifts[chosenGiftIndex]?.name}</h1>
-                <Image
-                  alt="Card background"
-                  className="object-fit h-80 bg-white rounded-xl shadow-lg p-5"
-                  src={gifts[chosenGiftIndex]?.img}
+                <div className="w-1/2 p-0 flex items-center justify-center">
+                  <div className="flex flex-col items-center justify-center">
+                    {/* <h1 className="text-white text-4xl font-extrabold mb-4">Winner Count: {winnerCount}</h1> */}
+                    {/* <h1 className="text-white text-4xl font-sans font-bold mb-4">{gifts[chosenGiftIndex]?.name}</h1> */}
+                    <Image
+                      alt="Card background"
+                      className="object-fit rounded-xl shadow-lg h-[600px]"
+                      src={gifts[chosenGiftIndex]?.img}
 
-                />
-                <div className="flex gap-4">
+                    />
+                    <div className="flex gap-4">
 
 
 
-                  {isNext ?
-                    <Button size="lg" className=" mt-10 bg-[#46C800] text-white  font-sans text-xl shadow-lg" onClick={() => { handleClose() }}>ҮРГЭЛЖЛҮҮЛЭХ</Button>
-                    : <Button size="lg" color="success" className=" mt-10 bg-[#46C800] text-white font-sans text-xl shadow-lg " disabled={disabled}
-                      onClick={() => { getWinner(0) }}
+                      {isNext ?
+                        <Button size="lg" className=" mt-10 bg-[#192663] text-white  font-sans text-xl shadow-lg" onClick={() => { handleClose() }}>ҮРГЭЛЖЛҮҮЛЭХ</Button>
+                        : <Button size="lg" color="success" className=" mt-10 bg-[#192663] text-white font-sans text-xl shadow-lg " disabled={disabled}
+                          onClick={() => { getWinner(0) }}
 
-                    >
-                      ЭХЛЭХ</Button>
-                  }
+                        >
+                          ЭХЛЭХ</Button>
+                      }
+                    </div>
+
+                  </div>
                 </div>
 
-              </div>
-            </div>
-
-            {/* </>
+                {/* </>
             : <a className="text-white text-6xl font-extrabold mb-72" onClick={() => {
               if (!disabled) { getWinner() } else { console.log("Lottery running") }
             }}>
@@ -293,20 +307,20 @@ export default function Home() {
             </a>
           } */}
 
-            <div className="w-1/2 mx-auto px-6 lg:px-8 flex flex-col items-center justify-center gap-y-14">
-              {Array.from({ length: gifts[chosenGiftIndex]?.winnerCount }, (_, winnerIndex) => (
-                <dl key={winnerIndex} className="grid grid-flow-col text-center justify-center">
-                  {number.split('').map((item, numberIndex) => (
-                    <div className="mx-2 flex items-center justify-center size-16 flex-col gap-y-4 rounded-full border-2 border-white bg-white" key={numberIndex}>
-                      <dd className="order-first text-5xl font-bold tracking-tight text-gray-900 sm:text-5xl">
-                        <span id={`value${winnerIndex}${numberIndex}`}>
-                          {item}
-                        </span>
-                      </dd>
-                    </div>
+                <div className="w-1/2 mx-auto px-0 lg:px-0 flex flex-col items-center justify-center gap-y-14">
+                  {Array.from({ length: gifts[chosenGiftIndex]?.winnerCount }, (_, winnerIndex) => (
+                    <dl key={winnerIndex} className="grid grid-flow-col text-center justify-center">
+                      {number.split('').map((item, numberIndex) => (
+                        <div className="mx-2 flex items-center justify-center size-16 flex-col gap-y-4 rounded-full border-2 border-white bg-white" key={numberIndex}>
+                          <dd className="order-first text-5xl font-bold tracking-tight text-gray-900 sm:text-5xl">
+                            <span id={`value${winnerIndex}${numberIndex}`}>
+                              {item}
+                            </span>
+                          </dd>
+                        </div>
+                      ))}
+                    </dl>
                   ))}
-                </dl>
-              ))}
 
 
 
@@ -314,36 +328,42 @@ export default function Home() {
 
 
 
+                </div>
+              </div>
+              <div className="flex flex-row gap-x-2 items-center justify-center">
+                <Image
+                  alt="Card background"
+                  className="object-fit h-10"
+                  src='assets/blast/sponsors.png'
+
+                />
+
+                {/* <h1 className="text-white text-4xl font-sans ">Бэлгийн эзэн тодруулах</h1>
+                <h1 className="bg-[#46C800] rounded-lg px-2 py-1 text-white text-4xl font-sans ">LIVE</h1> */}
+
+              </div>
             </div>
-          </div>
-          <div className="flex flex-row gap-x-2 items-center justify-center">
 
-            <h1 className="text-white text-4xl font-sans ">Бэлгийн эзэн тодруулах</h1>
-            <h1 className="bg-[#46C800] rounded-lg px-2 py-1 text-white text-4xl font-sans ">LIVE</h1>
-
-          </div>
-        </div>
-
-        <Modal backdrop={backdrop} isOpen={isOpen} onClose={() => {
-          handleClose()
-        }} size="3xl">
-          <ModalContent>
-            {(onClose) => (
-              <>
-                <ModalBody>
-                  <WinnerModal gift={gifts[chosenGiftIndex]} number={number}></WinnerModal>
-                </ModalBody>
-                <ModalFooter >
-                </ModalFooter>
-              </>
-            )}
-          </ModalContent>
-        </Modal>
-        {/* <div className=" h-1/6 mt-0">
+            <Modal backdrop={backdrop} isOpen={isOpen} onClose={() => {
+              handleClose()
+            }} size="3xl">
+              <ModalContent>
+                {(onClose) => (
+                  <>
+                    <ModalBody>
+                      <WinnerModal gift={gifts[chosenGiftIndex]} number={number}></WinnerModal>
+                    </ModalBody>
+                    <ModalFooter >
+                    </ModalFooter>
+                  </>
+                )}
+              </ModalContent>
+            </Modal>
+            {/* <div className=" h-1/6 mt-0">
       
   </div>  */}
-    </div>
-      </div>
-    </main>
-  );
+          </div>
+        </div>
+      </main>
+    );
 }
