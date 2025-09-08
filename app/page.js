@@ -262,8 +262,9 @@ export default function Home() {
                 {/* <h1 className="text-white text-4xl font-extrabold mb-4">Winner Count: {winnerCount}</h1> */}
                 {/* <h1 className="text-white text-4xl font-sans font-bold mb-4">{gifts[chosenGiftIndex]?.name}</h1> */}
                 <Image
+                style={{ height: '450px' }}
                   alt="Card background"
-                  className="object-fit h-80 "
+                  className="object-fit"
                   src={gifts[chosenGiftIndex]?.img}
 
                 />
