@@ -230,21 +230,22 @@ export default function Home() {
     
     <Button color="primary"  disabled={chosenGiftIndex < gifts.length ? true :false} onClick={()=>{getWinner()}}>start</Button>
     </div> */}
-      <div className="flex flex-col bg-[#0f123f] h-screen  p-12 gap-y-5 pt-12">
+      <div className=" bg-[url(/assets/mi/mi_bg.webp)] bg-black/50 flex flex-col  h-screen  p-12 gap-y-5 pt-12 ">
+     <div class="absolute inset-0 bg-black/50"></div>
 
-        <div className="flex flex-col items-center justify-between h-full gap-y-5">
+        <div className="relative z-10 flex flex-col items-center justify-between h-full gap-y-5">
           <div className="flex flex-col items-center justify-center gap-y-4">
-            <Image
-              // onClick={() => { if (!disabled) { getWinner() } else { console.log("Lottery running") } }}
+            
+            {/* <Image
               alt="Card background"
               className="object-cover h-20 "
               src="assets/looktv_logo.png"
+            /> */}
 
+            <h1 className="text-white text-5xl font-sans font-bold uppercase">Mission Impossible Merchandise</h1>
+            <h1 className="bg-[#64be00] rounded-lg px-2 py-1 text-white text-5xl font-sans">GIVEAWAY</h1>
 
-            />
-            {/* <h1 className="text-white text-5xl font-sans font-bold ">OFFICIAL MERCHANDISE</h1>
-            <h1 className="bg-[#47be37] rounded-lg px-2 py-1 text-white text-5xl font-sans">GIVEAWAY</h1> */}
-            <h1 className="text-[#00b7b1] text-5xl font-sans font-bold ">AUGUST GIVEAWAY</h1>
+            {/* <h1 className="text-[#00b7b1] text-5xl font-sans font-bold ">AUGUST GIVEAWAY</h1> */}
           </div>
 
           {/* {gifts[chosenGiftIndex]?.img ?
@@ -252,7 +253,7 @@ export default function Home() {
               <div className="text-white text-6xl font-extrabold">
                 {gifts[chosenGiftIndex]?.description}
               </div> */}
-          <div className="flex flex-row items-center justify-center gap-x-4">
+          <div className="flex flex-row items-center justify-center gap-x-20">
 
 
 
@@ -271,8 +272,8 @@ export default function Home() {
 
 
                   {isNext ?
-                    <Button size="lg" className=" mt-10 bg-[#00b7b1] text-white  font-sans text-xl shadow-lg" onClick={() => { handleClose() }}>ҮРГЭЛЖЛҮҮЛЭХ</Button>
-                    : <Button size="lg" color="success" className=" mt-10 bg-[#00b7b1] text-white font-sans text-xl shadow-lg " disabled={disabled}
+                    <Button size="lg" className=" mt-10 bg-[#64be00] text-white  font-sans text-xl shadow-lg" onClick={() => { handleClose() }}>ҮРГЭЛЖЛҮҮЛЭХ</Button>
+                    : <Button size="lg" color="success" className=" mt-10 bg-[#64be00] text-white font-sans text-xl shadow-lg " disabled={disabled}
                       onClick={() => { getWinner(0) }}
 
                     >
@@ -317,7 +318,7 @@ export default function Home() {
           <div className="flex flex-row gap-x-2 items-center justify-center">
 
             <h1 className="text-white text-4xl font-sans ">Бэлгийн эзэн тодруулах</h1>
-            <h1 className="bg-[#00b7b1] rounded-lg px-2 py-1 text-white text-4xl font-sans ">LIVE</h1>
+            <h1 className="bg-[#64be00] rounded-lg px-2 py-1 text-white text-4xl font-sans ">LIVE</h1>
 
           </div>
         </div>
