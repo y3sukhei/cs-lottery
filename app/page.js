@@ -13,7 +13,7 @@ import { useRef } from 'react';
 
 export default function Home() {
 
-  const [number, setNumber] = useState("-----------");
+  const [number, setNumber] = useState("--------");
   const [gifts, setGifts] = useState([]);
   const [chosenGiftIndex, setChosenGiftIndex] = useState(0);
   const [winnerIndex, setWinnerIndex] = useState(0);
@@ -115,7 +115,7 @@ export default function Home() {
       console.log("working right")
     }
 
-    setNumber("-----------")
+    setNumber("--------")
 
 
   }
@@ -137,7 +137,7 @@ export default function Home() {
   }
   const getWinner = (winnerCountIndex = 0) => {
     console.log("tickets var :", ticketsConst);
-    setNumber("           ")
+    setNumber("        ")
 
 
     if (gifts.length > 0 && ticketsConst.current.length > 0 && chosenGiftIndex < gifts.length) {
