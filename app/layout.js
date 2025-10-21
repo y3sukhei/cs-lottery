@@ -15,7 +15,7 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en" >
       <title>Lottery App</title>
-      <body className={inter.className}>
+      <body className={`${inter.className}`}>
         <Providers >
            {children}
        </Providers>  
