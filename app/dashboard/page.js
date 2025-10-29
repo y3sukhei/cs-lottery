@@ -27,6 +27,24 @@ const DashBoardPage = () => {
   // CSV
   const [csvData, setCsvData] = useState([]);
 
+  const [isLookTv, setIsLookTv] = useState(false);
+
+  const handleToggle = () => {
+    const newValue = !isLookTv;
+    setIsLookTv(newValue);
+    localStorage.setItem('giveawayType', newValue ? 'looktv' : 'univision');
+  };
+
+  // Also add useEffect to load the saved value on mount:
+  useEffect(() => {
+    const savedType = localStorage.getItem('giveawayType');
+    if (savedType === 'looktv') {
+      setIsLookTv(true);
+    } else if (savedType === 'univision') {
+      setIsLookTv(false);
+    }
+  }, []);
+
   let BATCH_SIZE = 1000;
 
   useEffect(() => {
@@ -331,6 +349,11 @@ const DashBoardPage = () => {
           <div className="flex flex-row gap-2 overflow-hidden">
             <div className="flex flex-col gap-4 w-3/12">
               <div >Insert Gift </div>
+              <button className={`px-4 py-2 rounded-md transition-colors duration-200 ${
+                  isLookTv ? 'bg-[#00b7b1] text-white' : 'bg-[#47be37] text-gray-800'
+                }`} onClick={handleToggle}>
+                {isLookTv ? 'Look TV giveaway' : 'Univision giveaway'}
+              </button>
               <Input
                 onChange={(e) => setName(e.target.value)}
                 isRequired
