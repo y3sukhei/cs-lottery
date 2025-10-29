@@ -1,6 +1,6 @@
 "use client"
 import { Button, Input, Chip, Card, CardFooter, Image, CardHeader } from "@nextui-org/react";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Papa from "papaparse";
 
 const DashBoardPage = () => {
@@ -13,21 +13,17 @@ const DashBoardPage = () => {
   const [tickets, setTickets] = useState([]);
 
   const [isAdding, setIsAdding] = useState(false);
-
   const [percent, setPercent] = useState(0);
 
-
-
-  // ticketList for POST
   const [ticketList, setTicketList] = useState([]);
-
   const [isUpdate, setIsUpdate] = useState(false)
   const [updateId, setUpdateId] = useState(0)
 
-  // CSV
-  const [csvData, setCsvData] = useState([]);
-
   const [isLookTv, setIsLookTv] = useState(false);
+
+  // Use ref for CSV data
+  const csvDataRef = useRef([]);
+  const fileInputRef = useRef(null);
 
   const handleToggle = () => {
     const newValue = !isLookTv;
@@ -35,7 +31,6 @@ const DashBoardPage = () => {
     localStorage.setItem('giveawayType', newValue ? 'looktv' : 'univision');
   };
 
-  // Also add useEffect to load the saved value on mount:
   useEffect(() => {
     const savedType = localStorage.getItem('giveawayType');
     if (savedType === 'looktv') {
@@ -48,10 +43,8 @@ const DashBoardPage = () => {
   let BATCH_SIZE = 1000;
 
   useEffect(() => {
-
     fetchGifts();
     fetchTickets()
-
   }, []);
 
   const fetchGifts = async () => {
@@ -67,6 +60,7 @@ const DashBoardPage = () => {
         setGifts(data)
       });
   }
+
   const fetchTickets = async () => {
     await fetch("/api/ticket", {
       method: "GET",
@@ -96,10 +90,12 @@ const DashBoardPage = () => {
       setDescription("")
       setWinnerCount(0)
       setImg("")
+      // Reset file input
+      if (fileInputRef.current) {
+        fileInputRef.current.value = "";
+      }
       setGifts([...gifts, data])
-
     }
-
   }
 
   const updateGift = async () => {
@@ -116,6 +112,9 @@ const DashBoardPage = () => {
       setDescription("")
       setWinnerCount(0)
       setImg("")
+      if (fileInputRef.current) {
+        fileInputRef.current.value = "";
+      }
 
       setIsUpdate(false);
       const data = await res.json();
@@ -123,35 +122,24 @@ const DashBoardPage = () => {
       const newData = [...gifts];
       newData[index] = data;
       setGifts(newData)
-
     }
-  }
-
-
-  const makeList = async (e) => {
-    setTicketList(e.split(" "));
-    console.log(
-      "ticket list :", e.split(" ")
-    )
   }
 
   const deleteAllParticipant = async () => {
     const res = await fetch(`/api/ticket/`, {
       method: 'DELETE',
-      // body: JSON.stringify({tickedId :ticketList[i]}),
       headers: {
         'Content-Type': 'application/json'
       }
     });
     const data = await res.json();
-    console.log("adter delete all :", data);
+    console.log("after delete all :", data);
     setTickets([]);
   }
 
   const deleteAllGift = async () => {
     const res = await fetch(`/api`, {
       method: 'DELETE',
-      // body: JSON.stringify({tickedId :ticketList[i]}),
       headers: {
         'Content-Type': 'application/json'
       }
@@ -161,70 +149,16 @@ const DashBoardPage = () => {
     setGifts([]);
   }
 
-  const addParticipant = async (i) => {
-    setIsAdding(true);
-    console.log(i);
-    const res = await fetch("/api/ticket", {
-      method: 'POST',
-      body: JSON.stringify(
-        { tickedId: ticketList[i] }
-      ),
-      headers: {
-        'Content-Type': 'application/json'
-      }
-    })
-
-    if (res.ok) {
-      const data = await res.json();
-      console.log("added ticket :", data);
-
-
-      setPercent(prevPercent => parseInt(prevPercent + (100 / ticketList.length)));
-
-
-      setTickets(prevTickets => [...prevTickets, data]);
-
-
-      if (i < ticketList.length - 1) {
-        i++;
-        // setTimeout(() => {
-        addParticipant(i);
-        // },500)
-      }
-      else {
-
-        setTimeout(() => {
-          setIsAdding(false)
-          setPercent(0);
-
-
-          console.log('stop2');
-        }, 1000)
-
-
-      }
-
-    }
-    else {
-      setIsAdding(false)
-
-      console.log('stop1');
-    }
-  }
-
   const handleGift = async (param, id) => {
     if (param == "delete") {
       const res = await fetch(`/api/gift/${id}`, {
         method: 'DELETE',
-        // body: JSON.stringify({tickedId :ticketList[i]}),
         headers: {
           'Content-Type': 'application/json'
         }
       });
       const data = await res.json();
-
       setGifts(gifts.filter((item) => item.id !== data.id))
-
     }
     else {
       setUpdateId(id);
@@ -240,27 +174,26 @@ const DashBoardPage = () => {
         setIsUpdate(true);
       }
     }
-
   }
-  const toSubs = async () => {
-    csvData.forEach((value) => {
-      console.log(value.sub_id);
-      setSubs(oldArray => [...oldArray, value.sub_id]);
 
-    });
-
-  }
+  // FIXED: Use csvDataRef.current instead of csvData state
   async function addParticipants() {
+    console.log("CSV Data length:", csvDataRef.current.length);
+    
+    if (!csvDataRef.current || csvDataRef.current.length === 0) {
+      alert("Please upload a CSV file first!");
+      return;
+    }
 
-    for (let i = 0; i < csvData.length; i += BATCH_SIZE) {
-      const batch = csvData.slice(i, i + BATCH_SIZE);
+    setIsAdding(true);
+    setPercent(0);
+
+    for (let i = 0; i < csvDataRef.current.length; i += BATCH_SIZE) {
+      const batch = csvDataRef.current.slice(i, i + BATCH_SIZE);
       try {
         const response = await fetch("/api/ticket/batch", {
           method: 'POST',
-          body: JSON.stringify(
-            { ticketList: batch }
-
-          ),
+          body: JSON.stringify({ ticketList: batch }),
           headers: {
             'Content-Type': 'application/json'
           }
@@ -272,75 +205,64 @@ const DashBoardPage = () => {
         const responseData = await response.json();
         console.log("responseData :", responseData);
         setTickets(prevTickets => [...prevTickets, ...responseData]);
-
+        
+        // Update progress
+        const progress = Math.min(((i + batch.length) / csvDataRef.current.length) * 100, 100);
+        setPercent(Math.round(progress));
 
       } catch (error) {
         console.error(`Error fetching:`, error);
-        // results.push(null);
       }
-
-
     }
 
-
-
-
-    // for (const data of csvData) {
-    //   try {
-    //     const response = await fetch("/api/ticket", {
-    //       method: 'POST',
-    //       body: JSON.stringify(
-    //         { tickedId: data.phone_no }
-    //       ),
-    //       headers: {
-    //         'Content-Type': 'application/json'
-    //       }
-    //     })
-
-    //     if (!response.ok) {
-    //       throw new Error(`HTTP error! status: ${response.status}`);
-    //     }
-    //     const responseData = await response.json();
-    //     setTickets(prevTickets => [...prevTickets, responseData]);
-
-
-    //   } catch (error) {
-    //     console.error(`Error fetching:`, error);
-    //     // results.push(null);
-    //   }
-    // }
+    setIsAdding(false);
+    setPercent(0);
   }
-
 
   const handleCsvFileUpload = (e) => {
     const file = e.target.files[0];
     if (file) {
       if (file.type === "text/csv") {
         Papa.parse(file, {
-          header: true, // If the CSV has headers
+          header: true,
           skipEmptyLines: true,
           complete: (result) => {
-            console.log("result :", result);
-
-
-
-            setCsvData(result.data); // Parsed data
-
-            // toSubs();
-
-            // setError("");
+            console.log("CSV parsed, rows:", result.data.length);
+            csvDataRef.current = result.data;
+            alert(`CSV loaded successfully! ${result.data.length} rows found.`);
           },
           error: (err) => {
             console.error("Error parsing CSV:", err);
-            setError("Error parsing CSV file.");
+            alert("Error parsing CSV file.");
           },
         });
       } else {
-        setError("Please upload a valid CSV file.");
+        alert("Please upload a valid CSV file.");
       }
     }
   };
 
+  // FIXED: Handle image upload properly
+  const handleImageUpload = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      // Check file size (limit to 5MB)
+      if (file.size > 5 * 1024 * 1024) {
+        alert("Image size should be less than 5MB");
+        return;
+      }
+
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setImg(reader.result);
+        console.log("Image loaded, size:", reader.result.length);
+      };
+      reader.onerror = () => {
+        alert("Error reading image file");
+      };
+      reader.readAsDataURL(file);
+    }
+  };
 
   return (
     <div className="px-16 py-6">
@@ -348,10 +270,13 @@ const DashBoardPage = () => {
         <div className="flex flex-col gap-4 h-auto rounded-lg px-6 py-8 ring-1 ring-slate-900/5 shadow-xl">
           <div className="flex flex-row gap-2 overflow-hidden">
             <div className="flex flex-col gap-4 w-3/12">
-              <div >Insert Gift </div>
-              <button className={`px-4 py-2 rounded-md transition-colors duration-200 ${
-                  isLookTv ? 'bg-[#00b7b1] text-white' : 'bg-[#47be37] text-gray-800'
-                }`} onClick={handleToggle}>
+              <div>Insert Gift</div>
+              <button 
+                className={`px-4 py-2 rounded-md transition-colors duration-200 ${
+                  isLookTv ? 'bg-[#00b7b1] text-white' : 'bg-[#47be37] text-white'
+                }`} 
+                onClick={handleToggle}
+              >
                 {isLookTv ? 'Look TV giveaway' : 'Univision giveaway'}
               </button>
               <Input
@@ -371,34 +296,47 @@ const DashBoardPage = () => {
                 value={description}
               />
               <Input
-                onChange={(e) => setWinnerCount(parseInt(e.target.value))}
+                onChange={(e) => setWinnerCount(parseInt(e.target.value) || 0)}
                 isRequired
                 type="number"
                 label="Winner Count"
                 className="max-w-sm"
                 value={winnerCount}
               />
-              <Input
-                onChange={(e) => setImg(e.target.value)}
-                isRequired
-                type="text"
-                label="Gift Image URL"
-                className="max-w-sm"
-                value={img}
+              
+              {img && (
+                <div className="max-w-sm">
+                  <p className="text-sm mb-2">Preview:</p>
+                  <Image
+                    src={img}
+                    alt="Preview"
+                    className="w-full h-32 object-cover rounded-lg"
+                  />
+                </div>
+              )}
+              
+              <input
+                ref={fileInputRef}
+                onChange={handleImageUpload}
+                type="file"
+                accept="image/*"
+                className="max-w-sm border rounded-lg p-2"
               />
+              
               {!isUpdate ?
-                (<Button color="primary" className="max-w-sm" onClick={() => {
-                  addGift()
-                }}>Add</Button>) : (<Button color="primary" className="max-w-sm" onClick={() => {
-                  updateGift()
-                }}>Update</Button>)}
-              <Button color="primary" className="max-w-sm" onClick={() => {
-                deleteAllGift()
-              }}>Delete All Gift</Button>
-
+                (<Button color="primary" className="max-w-sm" onClick={addGift}>
+                  Add
+                </Button>) : 
+                (<Button color="primary" className="max-w-sm" onClick={updateGift}>
+                  Update
+                </Button>)
+              }
+              <Button color="primary" className="max-w-sm" onClick={deleteAllGift}>
+                Delete All Gift
+              </Button>
             </div>
+            
             <div className="grid grid-cols-6 gap-4 p-4 w-9/12 rounded-lg border-2 border-stone-950 overflow-auto">
-
               {gifts.map((item, i) => (
                 <Card
                   isFooterBlurred
@@ -410,69 +348,61 @@ const DashBoardPage = () => {
                     {item.name}
                   </CardHeader>
                   <Image
-                    alt="Woman listing to music"
+                    alt={item.name}
                     className="object-cover"
                     height={200}
                     src={item.img}
                     width={200}
                   />
                   <CardFooter className="justify-between before:bg-white/10 border-white/20 border-1 overflow-hidden py-1 absolute before:rounded-xl rounded-large bottom-1 w-[calc(100%_-_8px)] shadow-small ml-1 z-10">
-                    <Button color="primary" onClick={() => {
-                      handleGift("edit", item.id);
-                    }}>Edit</Button>
-                    <Button color="primary" onClick={() => {
-                      handleGift("delete", item.id);
-                    }} >Delete</Button>
-
+                    <Button color="primary" onClick={() => handleGift("edit", item.id)}>
+                      Edit
+                    </Button>
+                    <Button color="primary" onClick={() => handleGift("delete", item.id)}>
+                      Delete
+                    </Button>
                   </CardFooter>
                 </Card>
               ))}
-
             </div>
           </div>
         </div>
+        
         <div className="flex flex-col h-auto gap-4 rounded-lg px-6 py-8 ring-1 ring-slate-900/5 shadow-xl">
-          <div className="flex flex-row gap-2 ">
-
+          <div className="flex flex-row gap-2">
             <div className="flex flex-col gap-4 w-3/12">
-              <div >Insert Participants </div>
+              <div>Insert Participants</div>
               <input
-                id="title"
-                onChange={(e) => {
-                  handleCsvFileUpload(e);
-                  // makeList(e.target.value);
-                  // setTickedId(e.target.value);
-                }}
+                onChange={handleCsvFileUpload}
                 type="file"
                 accept=".csv"
-                // label="Enter CSV File"
-                className="max-w-sm"
+                className="max-w-sm border rounded-lg p-2"
               />
-              <Button color="primary" className="max-w-sm" onClick={() => {
-                addParticipants();
-              }} >Add Ticket</Button>
+              <Button 
+                color="primary" 
+                className="max-w-sm" 
+                onClick={addParticipants}
+                disabled={isAdding}
+              >
+                {isAdding ? `Adding... ${percent}%` : 'Add Tickets'}
+              </Button>
 
-              <Button color="primary" className="max-w-sm" onClick={() => {
-                deleteAllParticipant();
-              }} >Delete All Tickets</Button>
-              {
-                isAdding ? <div className="text-lg">LOADING {percent} %</div> :
-
-                  <div>
-                    {tickets.length}
-                  </div>
-              }
-
+              <Button color="primary" className="max-w-sm" onClick={deleteAllParticipant}>
+                Delete All Tickets
+              </Button>
+              
+              <div className="text-lg">
+                {isAdding ? `LOADING ${percent}%` : `Total: ${tickets.length} tickets`}
+              </div>
             </div>
 
             <div className="grid grid-cols-8 gap-4 p-4 w-9/12 rounded-lg border-2 border-stone-950 max-h-[45vh] overflow-auto">
               {tickets.map((item, i) => (
-                <Chip key={i} onClose={() => console.log("close")}>
-                  {item.ticketId}
+                <Chip key={i}>
+                  {item.ticketId || item.phone_no || item.sub_id}
                 </Chip>
               ))}
             </div>
-
           </div>
         </div>
       </div>

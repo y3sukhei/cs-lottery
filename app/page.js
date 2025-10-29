@@ -36,7 +36,6 @@ export default function Home() {
   useEffect(() => {
     console.log("refresh")
     
-    // Load giveaway type from localStorage
     const savedType = localStorage.getItem('giveawayType');
     console.log("Loaded giveaway type:", savedType);
     
@@ -51,21 +50,6 @@ export default function Home() {
 
   }, [])
 
-  function countDuplicatesAtIndex(index, key, list) {
-    if (index < 0 || index >= list.length) {
-      console.error("Invalid index");
-      return 0;
-    }
-
-    const valueToCheck = list[index][key];
-
-    const count = list.reduce((acc, obj) => {
-      return obj[key] === valueToCheck ? acc + 1 : acc;
-    }, 0);
-
-    return count;
-  }
-
   const fetchGifts = async () => {
     await fetch("/api", {
       method: "GET",
@@ -77,6 +61,10 @@ export default function Home() {
       .then((data) => {
         setGifts(data);
         console.log("gifts :", data);
+        setLoading(false);
+      })
+      .catch((error) => {
+        console.error("Error fetching gifts:", error);
         setLoading(false);
       });
   }
@@ -91,7 +79,12 @@ export default function Home() {
       .then((res) => res.json())
       .then((data) => {
         ticketsConst.current = data;
+        console.log("tickets loaded:", data.length);
         setLoading(false)
+      })
+      .catch((error) => {
+        console.error("Error fetching tickets:", error);
+        setLoading(false);
       });
   }
 
@@ -102,7 +95,7 @@ export default function Home() {
       setIsNext(false);
     }
     else {
-      console.log("working right")
+      console.log("All gifts completed")
     }
     setNumber("--------")
   }
@@ -129,17 +122,19 @@ export default function Home() {
 
       const random = ticketsConst.current[Math.floor((Math.random() * ticketsConst.current.length))]
 
-      console.log("tickets :", ticketsConst);
+      console.log("Selected ticket:", random);
       ticketsConst.current = ticketsConst.current.filter((item) => item.id !== random.id)
 
-      realNumber = random.ticketId;
+      realNumber = random.ticketId || random.phone_no || random.sub_id || "00000000";
 
       saveWinner(random.id);
 
       setTimeout(() => {
         getRandom(0, winnerCountIndex);
       }, 1000)
-    } else alert("Error")
+    } else {
+      alert("Error: No gifts or tickets available")
+    }
   }
 
   const getRandom = (objId = 0, winnerCountIndex) => {
@@ -152,27 +147,29 @@ export default function Home() {
       jsConfetti.addConfetti()
 
       if (winnerCountIndex < gifts[chosenGiftIndex].winnerCount - 1) {
-        console.log("working")
+        console.log("Next winner")
         getWinner(winnerCountIndex + 1);
       } else {
-        console.log("duussan next ")
+        console.log("All winners selected")
         setIsNext(true);
       }
     }
     else {
       obj = document.getElementById(`value${winnerCountIndex}${objId}`);
-      animateValue(objId, obj, 100, 0, 800, winnerCountIndex);
+      if (obj) {
+        animateValue(objId, obj, 100, 0, 800, winnerCountIndex);
+      }
     }
   }
 
   async function animateValue(objId, obj, start, end, duration, winnerCountIndex) {
-    console.log("real number :", realNumber);
     let startTimestamp = null;
     const step = (timestamp) => {
       if (!startTimestamp) startTimestamp = timestamp;
       const progress = Math.min((timestamp - startTimestamp) / duration, 1);
 
       if (progress < 1) {
+        obj.innerHTML = Math.floor(Math.random() * 10);
         window.requestAnimationFrame(step);
       }
       else if (objId < realNumber.length) {
@@ -186,7 +183,7 @@ export default function Home() {
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center h-screen">
+      <div className="flex items-center justify-center h-screen bg-gray-900">
         <div className="text-white text-2xl">Loading...</div>
       </div>
     );
@@ -207,14 +204,23 @@ export default function Home() {
               {new Date().toLocaleString('en-US', { month: 'long' }).toUpperCase()} GIVEAWAY
             </h1>
           </div>
-          <div className="flex flex-row items-center justify-center gap-x-4">
+          <div className="flex flex-row items-center justify-center gap-x-4 w-full">
             <div className="w-1/2 p-4 flex items-center justify-center">
               <div className="flex flex-col items-center justify-center">
-                <Image
-                  alt="Gift Image"
-                  className="object-fit h-80"
-                  src={gifts[chosenGiftIndex]?.img}
-                />
+                {gifts[chosenGiftIndex]?.img && (
+                  <div className="relative w-80 h-80 mb-4">
+                    <Image
+                      alt="Gift Image"
+                      className="object-contain w-full h-full"
+                      src={gifts[chosenGiftIndex].img}
+                      style={{
+                        maxWidth: '100%',
+                        maxHeight: '100%',
+                        objectFit: 'contain'
+                      }}
+                    />
+                  </div>
+                )}
                 <div className="flex gap-4">
                   {isNext ?
                     <Button 
@@ -274,24 +280,33 @@ export default function Home() {
         </Modal>
       </div>
      ) : (
-      <div className="bg-black bg-opacity-50 h-screen absolute z-10 top-0 left-0 p-12 w-screen">
+      <div className="flex flex-col bg-[#56cf7e] h-screen p-12 gap-y-5 pt-12">
         <div className="flex flex-col items-center justify-between h-full gap-y-5">
           <div className="flex flex-col items-center justify-center gap-y-4">
             <Image
-              alt="Look TV Logo"
+              alt="Univision Logo"
               className="object-cover h-20"
               src="/assets/univision_logo.png"
             />
             <h1 className="bg-[#47be37] rounded-lg px-2 py-1 text-white text-5xl font-sans">GIVEAWAY</h1> 
           </div>
-          <div className="flex flex-row items-center justify-center gap-x-4">
+          <div className="flex flex-row items-center justify-center gap-x-4 w-full">
             <div className="w-1/2 p-4 flex items-center justify-center">
               <div className="flex flex-col items-center justify-center">
-                <Image
-                  alt="Gift Image"
-                  className="object-fit h-80"
-                  src={gifts[chosenGiftIndex]?.img}
-                />
+                {gifts[chosenGiftIndex]?.img && (
+                  <div className="relative w-80 h-80 mb-4">
+                    <Image
+                      alt="Gift Image"
+                      className="object-contain w-full h-full"
+                      src={gifts[chosenGiftIndex].img}
+                      style={{
+                        maxWidth: '100%',
+                        maxHeight: '100%',
+                        objectFit: 'contain'
+                      }}
+                    />
+                  </div>
+                )}
                 <div className="flex gap-4">
                   {isNext ?
                     <Button 
