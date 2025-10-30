@@ -270,7 +270,7 @@ const DashBoardPage = () => {
         <div className="flex flex-col gap-4 h-auto rounded-lg px-6 py-8 ring-1 ring-slate-900/5 shadow-xl">
           <div className="flex flex-row gap-2 overflow-hidden">
             <div className="flex flex-col gap-4 w-3/12">
-              <div>Insert Gift</div>
+              <div className="text-2xl font-bold">Add Gift</div>
               <button 
                 className={`px-4 py-2 rounded-md transition-colors duration-200 ${
                   isLookTv ? 'bg-[#00b7b1] text-white' : 'bg-[#47be37] text-white'
@@ -336,7 +336,7 @@ const DashBoardPage = () => {
               </Button>
             </div>
             
-            <div className="grid grid-cols-6 gap-4 p-4 w-9/12 rounded-lg border-2 border-stone-950 overflow-auto">
+            <div className="grid grid-cols-4 gap-4 p-4 w-9/12 rounded-lg border-2 border-stone-950 overflow-auto">
               {gifts.map((item, i) => (
                 <Card
                   isFooterBlurred
@@ -371,7 +371,7 @@ const DashBoardPage = () => {
         <div className="flex flex-col h-auto gap-4 rounded-lg px-6 py-8 ring-1 ring-slate-900/5 shadow-xl">
           <div className="flex flex-row gap-2">
             <div className="flex flex-col gap-4 w-3/12">
-              <div>Insert Participants</div>
+              <div className="text-2xl font-bold">Add Participants</div>
               <input
                 onChange={handleCsvFileUpload}
                 type="file"
@@ -391,7 +391,7 @@ const DashBoardPage = () => {
                 Delete All Tickets
               </Button>
               
-              <div className="text-lg">
+              <div className="text-lg font-bold">
                 {isAdding ? `LOADING ${percent}%` : `Total: ${tickets.length} tickets`}
               </div>
             </div>
