@@ -2,35 +2,34 @@
 import { Button, Input, Chip, Card, CardFooter, Image, CardHeader } from "@nextui-org/react";
 import { useEffect, useRef, useState } from "react";
 import Papa from "papaparse";
-
+ 
 const DashBoardPage = () => {
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
   const [winnerCount, setWinnerCount] = useState(0);
   const [img, setImg] = useState("");
-
+ 
   const [gifts, setGifts] = useState([]);
   const [tickets, setTickets] = useState([]);
-
+ 
   const [isAdding, setIsAdding] = useState(false);
   const [percent, setPercent] = useState(0);
-
+ 
   const [ticketList, setTicketList] = useState([]);
   const [isUpdate, setIsUpdate] = useState(false)
   const [updateId, setUpdateId] = useState(0)
-
+ 
   const [isLookTv, setIsLookTv] = useState(false);
-
-  // Use ref for CSV data
+ 
   const csvDataRef = useRef([]);
   const fileInputRef = useRef(null);
-
+ 
   const handleToggle = () => {
     const newValue = !isLookTv;
     setIsLookTv(newValue);
     localStorage.setItem('giveawayType', newValue ? 'looktv' : 'univision');
   };
-
+ 
   useEffect(() => {
     const savedType = localStorage.getItem('giveawayType');
     if (savedType === 'looktv') {
@@ -39,14 +38,14 @@ const DashBoardPage = () => {
       setIsLookTv(false);
     }
   }, []);
-
+ 
   let BATCH_SIZE = 1000;
-
+ 
   useEffect(() => {
     fetchGifts();
     fetchTickets()
   }, []);
-
+ 
   const fetchGifts = async () => {
     await fetch("/api", {
       method: "GET",
@@ -60,7 +59,7 @@ const DashBoardPage = () => {
         setGifts(data)
       });
   }
-
+ 
   const fetchTickets = async () => {
     await fetch("/api/ticket", {
       method: "GET",
@@ -73,7 +72,7 @@ const DashBoardPage = () => {
         setTickets(data)
       });
   }
-
+ 
   const addGift = async () => {
     const res = await fetch("/api", {
       method: 'POST',
@@ -90,14 +89,13 @@ const DashBoardPage = () => {
       setDescription("")
       setWinnerCount(0)
       setImg("")
-      // Reset file input
       if (fileInputRef.current) {
         fileInputRef.current.value = "";
       }
       setGifts([...gifts, data])
     }
   }
-
+ 
   const updateGift = async () => {
     const res = await fetch(`/api/gift/${updateId}`, {
       method: 'PUT',
@@ -115,7 +113,7 @@ const DashBoardPage = () => {
       if (fileInputRef.current) {
         fileInputRef.current.value = "";
       }
-
+ 
       setIsUpdate(false);
       const data = await res.json();
       const index = gifts.findIndex((item) => item.id == updateId);
@@ -124,8 +122,9 @@ const DashBoardPage = () => {
       setGifts(newData)
     }
   }
-
+ 
   const deleteAllParticipant = async () => {
+    if (!confirm("Are you sure you want to delete all tickets?")) return;
     const res = await fetch(`/api/ticket/`, {
       method: 'DELETE',
       headers: {
@@ -136,8 +135,9 @@ const DashBoardPage = () => {
     console.log("after delete all :", data);
     setTickets([]);
   }
-
+ 
   const deleteAllGift = async () => {
+    if (!confirm("Are you sure you want to delete all gifts?")) return;
     const res = await fetch(`/api`, {
       method: 'DELETE',
       headers: {
@@ -148,9 +148,10 @@ const DashBoardPage = () => {
     console.log("after delete all :", data);
     setGifts([]);
   }
-
+ 
   const handleGift = async (param, id) => {
     if (param == "delete") {
+      if (!confirm("Are you sure you want to delete this gift?")) return;
       const res = await fetch(`/api/gift/${id}`, {
         method: 'DELETE',
         headers: {
@@ -164,19 +165,18 @@ const DashBoardPage = () => {
       setUpdateId(id);
       const data = gifts.filter((item) => item.id == id)
       console.log("data :", data[0])
-
+ 
       setName(data[0].name)
       setDescription(data[0].description)
       setWinnerCount(data[0].winnerCount)
       setImg(data[0].img)
-
+ 
       if (!isUpdate) {
         setIsUpdate(true);
       }
     }
   }
-
-  // FIXED: Use csvDataRef.current instead of csvData state
+ 
   async function addParticipants() {
     console.log("CSV Data length:", csvDataRef.current.length);
     
@@ -184,10 +184,10 @@ const DashBoardPage = () => {
       alert("Please upload a CSV file first!");
       return;
     }
-
+ 
     setIsAdding(true);
     setPercent(0);
-
+ 
     for (let i = 0; i < csvDataRef.current.length; i += BATCH_SIZE) {
       const batch = csvDataRef.current.slice(i, i + BATCH_SIZE);
       try {
@@ -198,7 +198,7 @@ const DashBoardPage = () => {
             'Content-Type': 'application/json'
           }
         })
-
+ 
         if (!response.ok) {
           throw new Error(`HTTP error! status: ${response.status}`);
         }
@@ -206,19 +206,18 @@ const DashBoardPage = () => {
         console.log("responseData :", responseData);
         setTickets(prevTickets => [...prevTickets, ...responseData]);
         
-        // Update progress
         const progress = Math.min(((i + batch.length) / csvDataRef.current.length) * 100, 100);
         setPercent(Math.round(progress));
-
+ 
       } catch (error) {
         console.error(`Error fetching:`, error);
       }
     }
-
+ 
     setIsAdding(false);
     setPercent(0);
   }
-
+ 
   const handleCsvFileUpload = (e) => {
     const file = e.target.files[0];
     if (file) {
@@ -241,17 +240,15 @@ const DashBoardPage = () => {
       }
     }
   };
-
-  // FIXED: Handle image upload properly
+ 
   const handleImageUpload = (e) => {
     const file = e.target.files[0];
     if (file) {
-      // Check file size (limit to 5MB)
       if (file.size > 5 * 1024 * 1024) {
         alert("Image size should be less than 5MB");
         return;
       }
-
+ 
       const reader = new FileReader();
       reader.onloadend = () => {
         setImg(reader.result);
@@ -263,145 +260,302 @@ const DashBoardPage = () => {
       reader.readAsDataURL(file);
     }
   };
-
+ 
+  const cancelEdit = () => {
+    setIsUpdate(false);
+    setUpdateId(0);
+    setName("");
+    setDescription("");
+    setWinnerCount(0);
+    setImg("");
+    if (fileInputRef.current) {
+      fileInputRef.current.value = "";
+    }
+  };
+ 
   return (
-    <div className="px-16 py-6">
-      <div className="flex flex-col gap-4 max-h-screen">
-        <div className="flex flex-col gap-4 h-auto rounded-lg px-6 py-8 ring-1 ring-slate-900/5 shadow-xl">
-          <div className="flex flex-row gap-2 overflow-hidden">
-            <div className="flex flex-col gap-4 w-3/12">
-              <div className="text-2xl font-bold">Add Gift</div>
-              <button 
-                className={`px-4 py-2 rounded-md transition-colors duration-200 ${
-                  isLookTv ? 'bg-[#00b7b1] text-white' : 'bg-[#47be37] text-white'
-                }`} 
-                onClick={handleToggle}
-              >
-                {isLookTv ? 'Look TV giveaway' : 'Univision giveaway'}
-              </button>
-              <Input
-                onChange={(e) => setName(e.target.value)}
-                isRequired
-                type="text"
-                label="Gift Name"
-                className="max-w-sm"
-                value={name}
-              />
-              <Input
-                onChange={(e) => setDescription(e.target.value)}
-                isRequired
-                type="text"
-                label="Gift Description"
-                className="max-w-sm"
-                value={description}
-              />
-              <Input
-                onChange={(e) => setWinnerCount(parseInt(e.target.value) || 0)}
-                isRequired
-                type="number"
-                label="Winner Count"
-                className="max-w-sm"
-                value={winnerCount}
-              />
-              
-              {img && (
-                <div className="max-w-sm">
-                  <p className="text-sm mb-2">Preview:</p>
-                  <Image
-                    src={img}
-                    alt="Preview"
-                    className="w-full h-32 object-cover rounded-lg"
-                  />
-                </div>
-              )}
-              
-              <input
-                ref={fileInputRef}
-                onChange={handleImageUpload}
-                type="file"
-                accept="image/*"
-                className="max-w-sm border rounded-lg p-2"
-              />
-              
-              {!isUpdate ?
-                (<Button color="primary" className="max-w-sm" onClick={addGift}>
-                  Add
-                </Button>) : 
-                (<Button color="primary" className="max-w-sm" onClick={updateGift}>
-                  Update
-                </Button>)
-              }
-              <Button color="primary" className="max-w-sm" onClick={deleteAllGift}>
-                Delete All Gift
-              </Button>
+    <div className="min-h-screen bg-gray-50 p-6">
+      <div className="max-w-7xl mx-auto space-y-6">
+        
+        {/* Header */}
+        <div className="bg-white rounded-lg shadow-sm p-6 border border-gray-200">
+          <div className="flex items-center justify-between">
+            <div>
+              <h1 className="text-3xl font-bold text-gray-900">Admin Dashboard</h1>
+              <p className="text-gray-500 mt-1">Manage giveaway gifts and participants</p>
             </div>
-            
-            <div className="grid grid-cols-4 gap-4 p-4 w-9/12 rounded-lg border-2 border-stone-950 overflow-auto">
-              {gifts.map((item, i) => (
-                <Card
-                  isFooterBlurred
-                  key={i}
-                  radius="lg"
-                  className="border-none"
-                >
-                  <CardHeader className="flex gap-3">
-                    {item.name}
-                  </CardHeader>
-                  <Image
-                    alt={item.name}
-                    className="object-cover"
-                    height={200}
-                    src={item.img}
-                    width={200}
+            <button
+              className={`px-6 py-3 w-32 rounded-lg font-medium transition-all duration-200 shadow-sm hover:shadow-md ${
+                isLookTv ? 'bg-[#00b7b1] text-white' : 'bg-[#47be37] text-white'
+              }`}
+              onClick={handleToggle}
+            >
+              {isLookTv ? 'Look TV' : 'Univision'}
+            </button>
+          </div>
+        </div>
+ 
+        {/* Gift Management Section */}
+        <div className="bg-white rounded-lg shadow-sm border border-gray-200">
+          <div className="p-6">
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+              
+              {/* Form Section */}
+              <div className="lg:col-span-1 space-y-4">
+                <div className="space-y-4">
+                  <Input
+                    onChange={(e) => setName(e.target.value)}
+                    isRequired
+                    type="text"
+                    label="Gift Name"
+                    placeholder="Enter gift name"
+                    value={name}
+                    variant="bordered"
                   />
-                  <CardFooter className="justify-between before:bg-white/10 border-white/20 border-1 overflow-hidden py-1 absolute before:rounded-xl rounded-large bottom-1 w-[calc(100%_-_8px)] shadow-small ml-1 z-10">
-                    <Button color="primary" onClick={() => handleGift("edit", item.id)}>
-                      Edit
+                  
+                  <Input
+                    onChange={(e) => setDescription(e.target.value)}
+                    isRequired
+                    type="text"
+                    label="Gift Description"
+                    placeholder="Enter description"
+                    value={description}
+                    variant="bordered"
+                  />
+                  
+                  <Input
+                    onChange={(e) => setWinnerCount(parseInt(e.target.value) || 0)}
+                    isRequired
+                    type="number"
+                    label="Winner Count"
+                    placeholder="Number of winners"
+                    value={winnerCount}
+                    variant="bordered"
+                    min="0"
+                  />
+                  
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                      Gift Image
+                    </label>
+                    <input
+                      ref={fileInputRef}
+                      onChange={handleImageUpload}
+                      type="file"
+                      accept="image/*"
+                      className="w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-primary file:text-white hover:file:bg-primary/90 cursor-pointer"
+                    />
+                  </div>
+                  
+                  {img && (
+                    <div className="relative">
+                      <Image
+                        src={img}
+                        alt="Preview"
+                        className="w-full h-40 object-cover rounded-lg"
+                      />
+                      <button
+                        onClick={() => setImg("")}
+                        className="absolute top-2 right-2 bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center text-xs hover:bg-red-600"
+                      >
+                        ×
+                      </button>
+                    </div>
+                  )}
+                </div>
+ 
+                <div className="space-y-2 pt-4">
+                  {!isUpdate ? (
+                    <Button
+                      color="primary"
+                      className="w-full"
+                      onClick={addGift}
+                      isDisabled={!name || !description || winnerCount <= 0}
+                    >
+                      Add Gift
                     </Button>
-                    <Button color="primary" onClick={() => handleGift("delete", item.id)}>
-                      Delete
-                    </Button>
-                  </CardFooter>
-                </Card>
-              ))}
+                  ) : (
+                    <>
+                      <Button
+                        color="primary"
+                        className="w-full"
+                        onClick={updateGift}
+                      >
+                        Update Gift
+                      </Button>
+                      <Button
+                        variant="bordered"
+                        className="w-full"
+                        onClick={cancelEdit}
+                      >
+                        Cancel Edit
+                      </Button>
+                    </>
+                  )}
+                  
+                  <Button
+                    color="danger"
+                    variant="flat"
+                    className="w-full"
+                    onClick={deleteAllGift}
+                    isDisabled={gifts.length === 0}
+                  >
+                    Delete All Gifts
+                  </Button>
+                </div>
+              </div>
+              
+              {/* Gift Grid Section */}
+              <div className="lg:col-span-2">
+                <div className="bg-gray-50 rounded-lg p-4 border border-gray-200">
+                  <div className="flex items-center justify-between mb-4">
+                    <h3 className="font-medium text-gray-900">Current Gifts</h3>
+                    <span className="text-sm text-gray-500">{gifts.length} items</span>
+                  </div>
+                  
+                  <div className="grid grid-cols-2 md:grid-cols-3 gap-4 max-h-[500px] overflow-y-auto pr-2">
+                    {gifts.length === 0 ? (
+                      <div className="col-span-full text-center py-12 text-gray-400">
+                        No gifts added yet
+                      </div>
+                    ) : (
+                      gifts.map((item, i) => (
+                        <Card
+                          isFooterBlurred
+                          key={i}
+                          radius="lg"
+                          className="border-none hover:shadow-lg transition-shadow"
+                        >
+                          <CardHeader className="flex-col items-start px-4 pt-4 pb-2">
+                            <h4 className="font-semibold text-sm">{item.name}</h4>
+                            <p className="text-xs text-gray-500">Winners: {item.winnerCount}</p>
+                          </CardHeader>
+                          <Image
+                            alt={item.name}
+                            className="object-cover"
+                            height={150}
+                            src={item.img}
+                            width="100%"
+                          />
+                          <CardFooter className="justify-between bg-white/90 border-t border-gray-200 py-2 px-4">
+                            <Button
+                              size="sm"
+                              color="primary"
+                              variant="flat"
+                              onClick={() => handleGift("edit", item.id)}
+                            >
+                              Edit
+                            </Button>
+                            <Button
+                              size="sm"
+                              color="danger"
+                              variant="flat"
+                              onClick={() => handleGift("delete", item.id)}
+                            >
+                              Delete
+                            </Button>
+                          </CardFooter>
+                        </Card>
+                      ))
+                    )}
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </div>
-        
-        <div className="flex flex-col h-auto gap-4 rounded-lg px-6 py-8 ring-1 ring-slate-900/5 shadow-xl">
-          <div className="flex flex-row gap-2">
-            <div className="flex flex-col gap-4 w-3/12">
-              <div className="text-2xl font-bold">Add Participants</div>
-              <input
-                onChange={handleCsvFileUpload}
-                type="file"
-                accept=".csv"
-                className="max-w-sm border rounded-lg p-2"
-              />
-              <Button 
-                color="primary" 
-                className="max-w-sm" 
-                onClick={addParticipants}
-                disabled={isAdding}
-              >
-                {isAdding ? `Adding... ${percent}%` : 'Add Tickets'}
-              </Button>
-
-              <Button color="primary" className="max-w-sm" onClick={deleteAllParticipant}>
-                Delete All Tickets
-              </Button>
+ 
+        {/* Participants Management Section */}
+        <div className="bg-white rounded-lg shadow-sm border border-gray-200">
+          <div className="p-6">
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
               
-              <div className="text-lg font-bold">
-                {isAdding ? `LOADING ${percent}%` : `Total: ${tickets.length} tickets`}
+              {/* Upload Section */}
+              <div className="lg:col-span-1 space-y-4">
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    Upload CSV File
+                  </label>
+                  <input
+                    onChange={handleCsvFileUpload}
+                    type="file"
+                    accept=".csv"
+                    className="w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-primary file:text-white hover:file:bg-primary/90 cursor-pointer"
+                  />
+                  <p className="text-xs text-gray-500 mt-2">Upload a CSV file with participant data</p>
+                </div>
+ 
+                <div className="bg-gray-50 rounded-lg p-4 border border-gray-200">
+                  <div className="text-center">
+                    <div className="text-3xl font-bold text-gray-900">{tickets.length}</div>
+                    <div className="text-sm text-gray-500">Total Tickets</div>
+                  </div>
+                </div>
+ 
+                {isAdding && (
+                  <div className="bg-blue-50 rounded-lg p-4 border border-blue-200">
+                    <div className="flex items-center justify-between mb-2">
+                      <span className="text-sm font-medium text-blue-900">Uploading...</span>
+                      <span className="text-sm font-bold text-blue-900">{percent}%</span>
+                    </div>
+                    <div className="w-full bg-blue-200 rounded-full h-2">
+                      <div
+                        className="bg-blue-600 h-2 rounded-full transition-all duration-300"
+                        style={{ width: `${percent}%` }}
+                      />
+                    </div>
+                  </div>
+                )}
+ 
+                <div className="space-y-2">
+                  <Button
+                    color="primary"
+                    className="w-full"
+                    onClick={addParticipants}
+                    isDisabled={isAdding || csvDataRef.current.length === 0}
+                  >
+                    {isAdding ? `Uploading ${percent}%` : 'Add Tickets'}
+                  </Button>
+                  
+                  <Button
+                    color="danger"
+                    variant="flat"
+                    className="w-full"
+                    onClick={deleteAllParticipant}
+                    isDisabled={tickets.length === 0}
+                  >
+                    Delete All Tickets
+                  </Button>
+                </div>
               </div>
-            </div>
-
-            <div className="grid grid-cols-8 gap-4 p-4 w-9/12 rounded-lg border-2 border-stone-950 max-h-[45vh] overflow-auto">
-              {tickets.map((item, i) => (
-                <Chip key={i}>
-                  {item.ticketId || item.phone_no || item.sub_id}
-                </Chip>
-              ))}
+              
+              {/* Tickets Grid Section */}
+              <div className="lg:col-span-2">
+                <div className="bg-gray-50 rounded-lg p-4 border border-gray-200">
+                  <div className="flex items-center justify-between mb-4">
+                    <h3 className="font-medium text-gray-900">Participant Tickets</h3>
+                    <span className="text-sm text-gray-500">{tickets.length} tickets</span>
+                  </div>
+                  
+                  <div className="flex flex-wrap gap-2 max-h-[500px] overflow-y-auto pr-2">
+                    {tickets.length === 0 ? (
+                      <div className="w-full text-center py-12 text-gray-400">
+                        No tickets uploaded yet
+                      </div>
+                    ) : (
+                      tickets.map((item, i) => (
+                        <Chip
+                          key={i}
+                          variant="flat"
+                          size="sm"
+                        >
+                          {item.ticketId || item.phone_no || item.sub_id}
+                        </Chip>
+                      ))
+                    )}
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -409,5 +563,5 @@ const DashBoardPage = () => {
     </div>
   );
 }
-
+ 
 export default DashBoardPage;
