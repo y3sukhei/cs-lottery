@@ -197,14 +197,14 @@ export default function Home() {
       <style jsx global>{`
         @keyframes float {
           0%, 100% { transform: translateY(0px); }
-          50% { transform: translateY(-20px); }
+          50% { transform: translateY(-15px); }
         }
         @keyframes pulse-glow {
-          0%, 100% { box-shadow: 0 0 20px rgba(255, 255, 255, 0.5); }
-          50% { box-shadow: 0 0 40px rgba(255, 255, 255, 0.8); }
+          0%, 100% { box-shadow: 0 0 15px rgba(255, 255, 255, 0.4); }
+          50% { box-shadow: 0 0 30px rgba(255, 255, 255, 0.6); }
         }
         @keyframes slide-in {
-          from { transform: translateY(-100px); opacity: 0; }
+          from { transform: translateY(-50px); opacity: 0; }
           to { transform: translateY(0); opacity: 1; }
         }
         .animate-float {
@@ -214,7 +214,7 @@ export default function Home() {
           animation: pulse-glow 2s ease-in-out infinite;
         }
         .animate-slide-in {
-          animation: slide-in 0.6s ease-out;
+          animation: slide-in 0.5s ease-out;
         }
         .gradient-text {
           background: linear-gradient(90deg, #fff, #e0e0e0, #fff);
@@ -229,35 +229,35 @@ export default function Home() {
       `}</style>
  
      {isLookTv === true ? (
-      <div className="relative flex flex-col bg-gradient-to-br from-[#0a0d2e] via-[#0f123f] to-[#1a1f5c] h-screen p-12 gap-y-8">
-        <div className="absolute inset-0 overflow-hidden pointer-events-none opacity-20">
-          <div className="absolute top-20 left-20 w-64 h-64 bg-[#00b7b1] rounded-full blur-3xl"></div>
-          <div className="absolute bottom-20 right-20 w-96 h-96 bg-[#00b7b1] rounded-full blur-3xl"></div>
+      <div className="relative flex flex-col bg-gradient-to-br from-[#0a0d2e] via-[#0f123f] to-[#1a1f5c] min-h-screen h-screen p-4 gap-y-3 overflow-hidden">
+        <div className="absolute inset-0 overflow-hidden pointer-events-none opacity-15">
+          <div className="absolute top-10 left-10 w-40 h-40 bg-[#00b7b1] rounded-full blur-3xl"></div>
+          <div className="absolute bottom-10 right-10 w-60 h-60 bg-[#00b7b1] rounded-full blur-3xl"></div>
         </div>
  
-        <div className="relative flex flex-col items-center justify-between h-full gap-y-8 z-10">
-          <div className="flex flex-col items-center justify-center gap-y-6 animate-slide-in">
-            <div className="bg-white/10 backdrop-blur-sm rounded-2xl p-6 shadow-2xl">
+        <div className="relative flex flex-col items-center justify-between h-full gap-y-2 z-10">
+          <div className="flex flex-col items-center justify-center gap-y-2 animate-slide-in">
+            <div className="bg-white/10 backdrop-blur-sm rounded-xl p-2 shadow-xl">
               <Image
                 alt="Look TV Logo"
-                className="object-cover h-16"
+                className="object-cover h-8"
                 src="/assets/looktv_logo.png"
               />
             </div>
-            <h1 className="text-[#00b7b1] text-4xl font-bold tracking-wider drop-shadow-2xl gradient-text">
+            <h1 className="text-[#00b7b1] text-xl font-bold tracking-wider drop-shadow-xl gradient-text">
               {new Date().toLocaleString('en-US', { month: 'long' }).toUpperCase()} GIVEAWAY
             </h1>
           </div>
-          <div className="flex flex-row items-center justify-center gap-x-12 w-full max-w-7xl">
-            <div className="w-1/2 flex items-center justify-center">
-              <div className="flex flex-col items-center justify-center gap-y-8">
+          <div className="flex flex-row items-center justify-center gap-x-1 w-full max-w-6xl px-4">
+            <div className="w-5/12 flex items-center justify-end">
+              <div className="flex flex-col items-center justify-center gap-y-3">
                 {gifts[chosenGiftIndex]?.img && (
                   <div className="relative">
-                    <div className="absolute inset-0 bg-[#00b7b1] blur-2xl opacity-30 animate-pulse"></div>
-                    <div className="relative bg-white/10 backdrop-blur-md rounded-3xl p-8 shadow-2xl border border-white/20 animate-float">
+                    <div className="absolute inset-0 bg-[#00b7b1] blur-xl opacity-25 animate-pulse"></div>
+                    <div className="relative bg-white/10 backdrop-blur-md rounded-2xl p-3 shadow-xl border border-white/20 animate-float">
                       <Image
                         alt="Gift Image"
-                        className="object-contain w-80 h-80"
+                        className="object-contain w-40 h-40"
                         src={gifts[chosenGiftIndex].img}
                         style={{
                           maxWidth: '100%',
@@ -268,23 +268,23 @@ export default function Home() {
                     </div>
                   </div>
                 )}
-                <div className="bg-white/10 backdrop-blur-sm rounded-2xl px-8 py-4 border border-white/20">
-                  <h2 className="text-white text-2xl font-bold text-center">{gifts[chosenGiftIndex]?.name}</h2>
+                <div className="bg-white/10 backdrop-blur-sm rounded-xl px-4 py-1.5 border border-white/20">
+                  <h2 className="text-white text-lg font-bold text-center">{gifts[chosenGiftIndex]?.name}</h2>
                 </div>
  
-                <div className="flex gap-4">
+                <div className="flex gap-3">
                   {isNext ?
                     <Button
-                      size="lg"
-                      className="mt-4 bg-gradient-to-r from-[#00b7b1] to-[#00d4cd] text-white font-bold text-2xl shadow-2xl px-12 py-8 rounded-2xl hover:scale-105 transition-transform duration-300"
+                      size="md"
+                      className="mt-1 bg-gradient-to-r from-[#00b7b1] to-[#00d4cd] text-white font-bold text-lg shadow-xl px-6 py-3 rounded-xl hover:scale-105 transition-transform duration-300"
                       onClick={() => { handleClose() }}
                     >
                       ҮРГЭЛЖЛҮҮЛЭХ
                     </Button>
                     :
                     <Button
-                      size="lg"
-                      className="mt-4 bg-gradient-to-r from-[#00b7b1] to-[#00d4cd] text-white font-bold text-2xl shadow-2xl px-12 py-8 rounded-2xl hover:scale-105 transition-transform duration-300 disabled:opacity-50 disabled:cursor-not-allowed animate-pulse-glow"
+                      size="md"
+                      className="mt-1 bg-gradient-to-r from-[#00b7b1] to-[#00d4cd] text-white font-bold text-lg shadow-xl px-6 py-3 rounded-xl hover:scale-105 transition-transform duration-300 disabled:opacity-50 disabled:cursor-not-allowed animate-pulse-glow"
                       disabled={disabled}
                       onClick={() => { getWinner(0) }}
                     >
@@ -295,17 +295,17 @@ export default function Home() {
               </div>
             </div>
  
-            <div className="w-1/2 flex flex-col items-center justify-center gap-y-8">
+            <div className="w-1/2 flex flex-col items-center justify-center gap-y-3">
               {Array.from({ length: gifts[chosenGiftIndex]?.winnerCount || 0 }, (_, winnerIndex) => (
-                <div key={winnerIndex} className="w-full flex flex-col items-center gap-y-4">
-                  <dl className="grid grid-flow-col text-center justify-center gap-3">
+                <div key={winnerIndex} className="w-full flex flex-col items-center gap-y-2">
+                  <dl className="grid grid-flow-col text-center justify-center gap-1.5">
                     {number.split('').map((item, numberIndex) => (
                       <div
-                        className="relative flex items-center justify-center w-20 h-20 rounded-2xl bg-gradient-to-br from-white to-gray-100 shadow-2xl border-4 border-[#00b7b1] transform hover:scale-110 transition-transform duration-300"
+                        className="relative flex items-center justify-center w-10 h-10 rounded-lg bg-gradient-to-br from-white to-gray-100 shadow-xl border-2 border-[#00b7b1] transform hover:scale-110 transition-transform duration-300"
                         key={numberIndex}
                       >
-                        <div className="absolute inset-0 bg-[#00b7b1] blur-lg opacity-30 rounded-2xl"></div>
-                        <dd className="relative text-6xl font-black tracking-tight text-gray-900">
+                        <div className="absolute inset-0 bg-[#00b7b1] blur-md opacity-25 rounded-lg"></div>
+                        <dd className="relative text-2xl font-black tracking-tight text-gray-900">
                           <span id={`value${winnerIndex}${numberIndex}`}>
                             {item}
                           </span>
@@ -317,10 +317,10 @@ export default function Home() {
               ))}
             </div>
           </div>
-          <div className="flex flex-row gap-x-4 items-center justify-center bg-white/10 backdrop-blur-sm rounded-2xl px-8 py-4 border border-white/20">
-            <h1 className="text-white text-3xl font-semibold">Бэлгийн эзэн тодруулах</h1>
-            <div className="bg-gradient-to-r from-[#00b7b1] to-[#00d4cd] rounded-xl px-4 py-2 animate-pulse">
-              <h1 className="text-white text-3xl font-bold">LIVE</h1>
+          <div className="flex flex-row gap-x-2 items-center justify-center bg-white/10 backdrop-blur-sm rounded-xl px-4 py-1.5 border border-white/20">
+            <h1 className="text-white text-lg font-semibold">Бэлгийн эзэн тодруулах</h1>
+            <div className="bg-gradient-to-r from-[#00b7b1] to-[#00d4cd] rounded-lg px-2 py-0.5 animate-pulse">
+              <h1 className="text-white text-lg font-bold">LIVE</h1>
             </div>
           </div>
         </div>
@@ -338,36 +338,36 @@ export default function Home() {
         </Modal>
       </div>
      ) : (
-      <div className="relative flex flex-col bg-gradient-to-br from-[#225c2a] via-[#3a7d4a] to-[#4e9c5a] h-screen p-12 gap-y-8">
-        <div className="absolute inset-0 overflow-hidden pointer-events-none opacity-20">
-          <div className="absolute top-20 left-20 w-64 h-64 bg-[#47be37] rounded-full blur-3xl"></div>
-          <div className="absolute bottom-20 right-20 w-96 h-96 bg-[#47be37] rounded-full blur-3xl"></div>
+      <div className="relative flex flex-col bg-gradient-to-br from-[#225c2a] via-[#3a7d4a] to-[#4e9c5a] min-h-screen h-screen p-4 gap-y-3 overflow-hidden">
+        <div className="absolute inset-0 overflow-hidden pointer-events-none opacity-15">
+          <div className="absolute top-10 left-10 w-40 h-40 bg-[#47be37] rounded-full blur-3xl"></div>
+          <div className="absolute bottom-10 right-10 w-60 h-60 bg-[#47be37] rounded-full blur-3xl"></div>
         </div>
  
-        <div className="relative flex flex-col items-center justify-between h-full gap-y-8 z-10">
-          <div className="flex flex-col items-center justify-center gap-y-6 animate-slide-in">
-            <div className="bg-white/20 backdrop-blur-sm rounded-2xl p-6 shadow-2xl">
+        <div className="relative flex flex-col items-center justify-between h-full gap-y-2 z-10">
+          <div className="flex flex-col items-center justify-center gap-y-2 animate-slide-in">
+            <div className="bg-white/10 backdrop-blur-sm rounded-xl p-2 shadow-xl">
               <Image
                 alt="Univision Logo"
-                className="object-cover h-16"
+                className="object-cover h-8"
                 src="/assets/univision_logo.png"
               />
             </div>
-            <h1 className="text-[#47be37] text-4xl font-bold tracking-wider drop-shadow-2xl gradient-text">
+            <h1 className="text-[#47be37] text-xl font-bold tracking-wider drop-shadow-xl gradient-text">
               GIVEAWAY
             </h1>
           </div>
  
-          <div className="flex flex-row items-center justify-center gap-x-12 w-full max-w-7xl">
-            <div className="w-1/2 flex items-center justify-center">
-              <div className="flex flex-col items-center justify-center gap-y-8">
+          <div className="flex flex-row items-center justify-center gap-x-1 w-full max-w-6xl px-4">
+            <div className="w-5/12 flex items-center justify-end">
+              <div className="flex flex-col items-center justify-center gap-y-3">
                 {gifts[chosenGiftIndex]?.img && (
                   <div className="relative">
-                    <div className="absolute inset-0 bg-[#47be37] blur-2xl opacity-30 animate-pulse"></div>
-                    <div className="relative bg-white/20 backdrop-blur-md rounded-3xl p-8 shadow-2xl border border-white/30 animate-float">
+                    <div className="absolute inset-0 bg-[#47be37] blur-xl opacity-25 animate-pulse"></div>
+                    <div className="relative bg-white/20 backdrop-blur-md rounded-2xl p-3 shadow-xl border border-white/20 animate-float">
                       <Image
                         alt="Gift Image"
-                        className="object-contain w-80 h-80"
+                        className="object-contain w-40 h-40"
                         src={gifts[chosenGiftIndex].img}
                         style={{
                           maxWidth: '100%',
@@ -378,22 +378,22 @@ export default function Home() {
                     </div>
                   </div>
                 )}
-                <div className="bg-white/10 backdrop-blur-sm rounded-2xl px-8 py-4 border border-white/20">
-                  <h2 className="text-white text-2xl font-bold text-center">{gifts[chosenGiftIndex]?.name}</h2>
+                <div className="bg-white/10 backdrop-blur-sm rounded-xl px-4 py-1.5 border border-white/20">
+                  <h2 className="text-white text-lg font-bold text-center">{gifts[chosenGiftIndex]?.name}</h2>
                 </div>
-                <div className="flex gap-4">
+                <div className="flex gap-3">
                   {isNext ?
                     <Button
-                      size="lg"
-                      className="mt-4 bg-gradient-to-r from-[#47be37] to-[#3da857] text-white font-bold text-2xl shadow-2xl px-12 py-8 rounded-2xl hover:scale-105 transition-transform duration-300"
+                      size="md"
+                      className="mt-1 bg-gradient-to-r from-[#47be37] to-[#3da857] text-white font-bold text-lg shadow-xl px-6 py-3 rounded-xl hover:scale-105 transition-transform duration-300"
                       onClick={() => { handleClose() }}
                     >
                       ҮРГЭЛЖЛҮҮЛЭХ
                     </Button>
                     :
                     <Button
-                      size="lg"
-                      className="mt-4 bg-gradient-to-r from-[#47be37] to-[#3da857] text-white font-bold text-2xl shadow-2xl px-12 py-8 rounded-2xl hover:scale-105 transition-transform duration-300 disabled:opacity-50 disabled:cursor-not-allowed animate-pulse-glow"
+                      size="md"
+                      className="mt-1 bg-gradient-to-r from-[#47be37] to-[#3da857] text-white font-bold text-lg shadow-xl px-6 py-3 rounded-xl hover:scale-105 transition-transform duration-300 disabled:opacity-50 disabled:cursor-not-allowed animate-pulse-glow"
                       disabled={disabled}
                       onClick={() => { getWinner(0) }}
                     >
@@ -404,17 +404,17 @@ export default function Home() {
               </div>
             </div>
  
-            <div className="w-1/2 flex flex-col items-center justify-center gap-y-8">
+            <div className="w-1/2 flex flex-col items-center justify-center gap-y-3">
               {Array.from({ length: gifts[chosenGiftIndex]?.winnerCount || 0 }, (_, winnerIndex) => (
-                <div key={winnerIndex} className="w-full flex flex-col items-center gap-y-4">
-                  <dl className="grid grid-flow-col text-center justify-center gap-3">
+                <div key={winnerIndex} className="w-full flex flex-col items-center gap-y-2">
+                  <dl className="grid grid-flow-col text-center justify-center gap-1.5">
                     {number.split('').map((item, numberIndex) => (
                       <div
-                        className="relative flex items-center justify-center w-20 h-20 rounded-2xl bg-gradient-to-br from-white to-gray-100 shadow-2xl border-4 border-[#47be37] transform hover:scale-110 transition-transform duration-300"
+                        className="relative flex items-center justify-center w-10 h-10 rounded-lg bg-gradient-to-br from-white to-gray-100 shadow-xl border-2 border-[#47be37] transform hover:scale-110 transition-transform duration-300"
                         key={numberIndex}
                       >
-                        <div className="absolute inset-0 bg-[#47be37] blur-lg opacity-30 rounded-2xl"></div>
-                        <dd className="relative text-6xl font-black tracking-tight text-gray-900">
+                        <div className="absolute inset-0 bg-[#47be37] blur-md opacity-25 rounded-lg"></div>
+                        <dd className="relative text-2xl font-black tracking-tight text-gray-900">
                           <span id={`value${winnerIndex}${numberIndex}`}>
                             {item}
                           </span>
@@ -426,10 +426,10 @@ export default function Home() {
               ))}
             </div>
           </div>
-          <div className="flex flex-row gap-x-4 items-center justify-center bg-white/20 backdrop-blur-sm rounded-2xl px-8 py-4 border border-white/30">
-            <h1 className="text-white text-3xl font-semibold">Бэлгийн эзэн тодруулах</h1>
-            <div className="bg-gradient-to-r from-[#47be37] to-[#3da857] rounded-xl px-4 py-2 animate-pulse">
-              <h1 className="text-white text-3xl font-bold">LIVE</h1>
+          <div className="flex flex-row gap-x-2 items-center justify-center bg-white/20 backdrop-blur-sm rounded-xl px-4 py-1.5 border border-white/20">
+            <h1 className="text-white text-lg font-semibold">Бэлгийн эзэн тодруулах</h1>
+            <div className="bg-gradient-to-r from-[#47be37] to-[#3da857] rounded-lg px-2 py-0.5 animate-pulse">
+              <h1 className="text-white text-lg font-bold">LIVE</h1>
             </div>
           </div>
         </div>
