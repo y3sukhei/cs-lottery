@@ -204,7 +204,7 @@ const DashBoardPage = () => {
         }
         const responseData = await response.json();
         console.log("responseData :", responseData);
-        setTickets(prevTickets => [...prevTickets, ...responseData]);
+        setTickets(prevTickets => prevTickets.concat(batch));
         
         const progress = Math.min(((i + batch.length) / csvDataRef.current.length) * 100, 100);
         setPercent(Math.round(progress));
@@ -282,7 +282,6 @@ const DashBoardPage = () => {
           <div className="flex items-center justify-between">
             <div>
               <h1 className="text-3xl font-bold text-gray-900">Admin Dashboard</h1>
-              <p className="text-gray-500 mt-1">Manage giveaway gifts and participants</p>
             </div>
             <button
               className={`px-6 py-3 w-32 rounded-lg font-medium transition-all duration-200 shadow-sm hover:shadow-md ${
