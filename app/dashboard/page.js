@@ -69,6 +69,7 @@ const DashBoardPage = () => {
     })
       .then((res) => res.json())
       .then((data) => {
+        console.log("Fetched tickets:", data.length, "rows");
         setTickets(data)
       });
   }
@@ -179,18 +180,20 @@ const DashBoardPage = () => {
  
   async function addParticipants() {
     console.log("CSV Data length:", csvDataRef.current.length);
-    
+    console.log("CSV Data sample:", csvDataRef.current.slice(0, 5)); // Log first 5 rows
+
     if (!csvDataRef.current || csvDataRef.current.length === 0) {
       alert("Please upload a CSV file first!");
       return;
     }
- 
+
     setIsAdding(true);
     setPercent(0);
- 
+
     for (let i = 0; i < csvDataRef.current.length; i += BATCH_SIZE) {
       const batch = csvDataRef.current.slice(i, i + BATCH_SIZE);
       try {
+        console.log("Uploading batch:", batch.length, "rows");
         const response = await fetch("/api/ticket/batch", {
           method: 'POST',
           body: JSON.stringify({ ticketList: batch }),
@@ -198,26 +201,29 @@ const DashBoardPage = () => {
             'Content-Type': 'application/json'
           }
         })
- 
+
         if (!response.ok) {
           throw new Error(`HTTP error! status: ${response.status}`);
         }
         const responseData = await response.json();
-        console.log("responseData :", responseData);
+        console.log("Batch upload response:", responseData);
+
         setTickets(prevTickets => prevTickets.concat(batch));
-        
+
         const progress = Math.min(((i + batch.length) / csvDataRef.current.length) * 100, 100);
         setPercent(Math.round(progress));
- 
+
       } catch (error) {
         console.error(`Error fetching:`, error);
       }
     }
- 
+
     setIsAdding(false);
     setPercent(0);
+
+    fetchTickets();
   }
- 
+
   const handleCsvFileUpload = (e) => {
     const file = e.target.files[0];
     if (file) {
@@ -227,6 +233,7 @@ const DashBoardPage = () => {
           skipEmptyLines: true,
           complete: (result) => {
             console.log("CSV parsed, rows:", result.data.length);
+            console.log("CSV parsed sample:", result.data.slice(0, 5));
             csvDataRef.current = result.data;
             alert(`CSV loaded successfully! ${result.data.length} rows found.`);
           },
