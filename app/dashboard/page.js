@@ -177,52 +177,82 @@ const DashBoardPage = () => {
       }
     }
   }
- 
-  async function addParticipants() {
-    console.log("CSV Data length:", csvDataRef.current.length);
-    console.log("CSV Data sample:", csvDataRef.current.slice(0, 5)); // Log first 5 rows
 
-    if (!csvDataRef.current || csvDataRef.current.length === 0) {
-      alert("Please upload a CSV file first!");
-      return;
-    }
+async function addParticipants() {
+  console.log("CSV Data length:", csvDataRef.current.length);
+  console.log("CSV Data sample:", csvDataRef.current.slice(0, 5));
 
-    setIsAdding(true);
-    setPercent(0);
+  if (!csvDataRef.current || csvDataRef.current.length === 0) {
+    alert("Please upload a CSV file first!");
+    return;
+  }
+
+  setIsAdding(true);
+  setPercent(0);
+
+  try {
+    const totalBatches = Math.ceil(csvDataRef.current.length / BATCH_SIZE);
+    let uploadedCount = 0;
 
     for (let i = 0; i < csvDataRef.current.length; i += BATCH_SIZE) {
       const batch = csvDataRef.current.slice(i, i + BATCH_SIZE);
+      const batchNumber = Math.floor(i / BATCH_SIZE) + 1;
+      
+      console.log(`Uploading batch ${batchNumber}/${totalBatches}:`, batch.length, "rows");
+      
       try {
-        console.log("Uploading batch:", batch.length, "rows");
         const response = await fetch("/api/ticket/batch", {
           method: 'POST',
           body: JSON.stringify({ ticketList: batch }),
           headers: {
             'Content-Type': 'application/json'
           }
-        })
+        });
 
         if (!response.ok) {
-          throw new Error(`HTTP error! status: ${response.status}`);
+          const errorText = await response.text();
+          throw new Error(`HTTP error! status: ${response.status}, message: ${errorText}`);
         }
+        
         const responseData = await response.json();
-        console.log("Batch upload response:", responseData);
+        console.log(`Batch ${batchNumber} upload response:`, responseData);
 
-        setTickets(prevTickets => prevTickets.concat(batch));
-
-        const progress = Math.min(((i + batch.length) / csvDataRef.current.length) * 100, 100);
+        uploadedCount += batch.length;
+        const progress = Math.min((uploadedCount / csvDataRef.current.length) * 100, 100);
         setPercent(Math.round(progress));
 
       } catch (error) {
-        console.error(`Error fetching:`, error);
+        console.error(`Error uploading batch ${batchNumber}:`, error);
+        alert(`Failed to upload batch ${batchNumber}. Error: ${error.message}\n\nUploaded ${uploadedCount} of ${csvDataRef.current.length} tickets before error.`);
+        setIsAdding(false);
+        return; // Stop processing on error
+      }
+
+      // Small delay between batches to prevent overwhelming the server
+      if (i + BATCH_SIZE < csvDataRef.current.length) {
+        await new Promise(resolve => setTimeout(resolve, 100));
       }
     }
 
+    // Success - refresh the full ticket list from server
+    console.log("All batches uploaded successfully");
+    await fetchTickets();
+    alert(`Successfully uploaded ${csvDataRef.current.length} tickets!`);
+    
+    // Clear the CSV data after successful upload
+    csvDataRef.current = [];
+    if (fileInputRef.current) {
+      fileInputRef.current.value = "";
+    }
+
+  } catch (error) {
+    console.error("Unexpected error during upload:", error);
+    alert("An unexpected error occurred during upload. Please try again.");
+  } finally {
     setIsAdding(false);
     setPercent(0);
-
-    fetchTickets();
   }
+}
 
   const handleCsvFileUpload = (e) => {
     const file = e.target.files[0];
