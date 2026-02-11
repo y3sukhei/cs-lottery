@@ -354,7 +354,7 @@ export default function Home() {
               />
             </div>
             <h1 className="text-[#47be37] text-xl font-bold tracking-wider drop-shadow-xl gradient-text">
-              🎉✨ Happy New Year ✨🎉
+              GIVEAWAY
             </h1>
           </div>
  
