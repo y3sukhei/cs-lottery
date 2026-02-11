@@ -27,6 +27,7 @@ export async function POST(req) {
                 { status: 400 }
             );
         }
+        console.log("nothing returns as of today")
 
         if (validTickets.length < ticketList.length) {
             console.warn(`Warning: ${ticketList.length - validTickets.length} invalid tickets filtered out`);

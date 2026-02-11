@@ -346,13 +346,13 @@ export default function Home() {
  
         <div className="relative flex flex-col items-center justify-between h-full gap-y-2 z-10">
           <div className="flex flex-col items-center justify-center gap-y-2 animate-slide-in">
-            <div className="bg-white/10 backdrop-blur-sm rounded-xl p-2 shadow-xl">
+            {/* <div className="bg-white/10 backdrop-blur-sm rounded-xl p-2 shadow-xl">
               <Image
                 alt="Univision Logo"
                 className="object-cover h-8"
                 src="/assets/univision_logo.png"
               />
-            </div>
+            </div> */}
             <h1 className="text-[#47be37] text-xl font-bold tracking-wider drop-shadow-xl gradient-text">
               GIVEAWAY
             </h1>
