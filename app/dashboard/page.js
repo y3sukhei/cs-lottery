@@ -22,6 +22,7 @@ const DashBoardPage = () => {
   const [isLookTv, setIsLookTv] = useState(false);
  
   const csvDataRef = useRef([]);
+  const [csvCount, setCsvCount] = useState(0);
   const fileInputRef = useRef(null);
  
   const handleToggle = () => {
@@ -39,7 +40,7 @@ const DashBoardPage = () => {
     }
   }, []);
  
-  let BATCH_SIZE = 1000;
+  let BATCH_SIZE = 200;
  
   useEffect(() => {
     fetchGifts();
@@ -193,13 +194,15 @@ async function addParticipants() {
   try {
     const totalBatches = Math.ceil(csvDataRef.current.length / BATCH_SIZE);
     let uploadedCount = 0;
+    let createdTotal = 0;
+    let skippedTotal = 0;
 
     for (let i = 0; i < csvDataRef.current.length; i += BATCH_SIZE) {
       const batch = csvDataRef.current.slice(i, i + BATCH_SIZE);
       const batchNumber = Math.floor(i / BATCH_SIZE) + 1;
-      
+
       console.log(`Uploading batch ${batchNumber}/${totalBatches}:`, batch.length, "rows");
-      
+
       try {
         const response = await fetch("/api/ticket/batch", {
           method: 'POST',
@@ -213,10 +216,12 @@ async function addParticipants() {
           const errorText = await response.text();
           throw new Error(`HTTP error! status: ${response.status}, message: ${errorText}`);
         }
-        
+
         const responseData = await response.json();
         console.log(`Batch ${batchNumber} upload response:`, responseData);
 
+        createdTotal += responseData.created ?? 0;
+        skippedTotal += responseData.skipped ?? 0;
         uploadedCount += batch.length;
         const progress = Math.min((uploadedCount / csvDataRef.current.length) * 100, 100);
         setPercent(Math.round(progress));
@@ -237,10 +242,11 @@ async function addParticipants() {
     // Success - refresh the full ticket list from server
     console.log("All batches uploaded successfully");
     await fetchTickets();
-    alert(`Successfully uploaded ${csvDataRef.current.length} tickets!`);
+    alert(`Upload complete!\nCreated: ${createdTotal}\nSkipped duplicates: ${skippedTotal}\nTotal CSV rows: ${csvDataRef.current.length}`);
     
     // Clear the CSV data after successful upload
     csvDataRef.current = [];
+    setCsvCount(0);
     if (fileInputRef.current) {
       fileInputRef.current.value = "";
     }
@@ -265,6 +271,7 @@ async function addParticipants() {
             console.log("CSV parsed, rows:", result.data.length);
             console.log("CSV parsed sample:", result.data.slice(0, 5));
             csvDataRef.current = result.data;
+            setCsvCount(result.data.length);
             alert(`CSV loaded successfully! ${result.data.length} rows found.`);
           },
           error: (err) => {
@@ -548,7 +555,7 @@ async function addParticipants() {
                     color="primary"
                     className="w-full"
                     onClick={addParticipants}
-                    isDisabled={isAdding || csvDataRef.current.length === 0}
+                    isDisabled={isAdding || csvCount === 0}
                   >
                     {isAdding ? `Uploading ${percent}%` : 'Add Tickets'}
                   </Button>
