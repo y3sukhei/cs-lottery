@@ -338,7 +338,7 @@ export default function Home() {
         </Modal>
       </div>
      ) : (
-      <div className="relative flex flex-col bg-gradient-to-br from-[#225c2a] via-[#3a7d4a] to-[#4e9c5a] min-h-screen h-screen p-4 gap-y-3 overflow-hidden">
+      <div className="relative flex flex-col min-h-screen h-screen p-4 gap-y-3 overflow-hidden bg-center bg-no-repeat" style={{ backgroundImage: "url('/assets/unv_background.jpg')", backgroundSize: "100% 100%" }}>
         <div className="absolute inset-0 overflow-hidden pointer-events-none opacity-15">
           <div className="absolute top-10 left-10 w-40 h-40 bg-[#47be37] rounded-full blur-3xl"></div>
           <div className="absolute bottom-10 right-10 w-60 h-60 bg-[#47be37] rounded-full blur-3xl"></div>
@@ -346,11 +346,11 @@ export default function Home() {
  
         <div className="relative flex flex-col items-center justify-between h-full gap-y-2 z-10">
           <div className="flex flex-col items-center justify-center gap-y-2 animate-slide-in">
-            <div className="bg-white/10 backdrop-blur-sm rounded-xl p-2 shadow-xl">
+            <div className="bg-white/10 backdrop-blur-sm rounded-xl p-2 shadow-xl ">
               <Image
                 alt="Univision Logo"
-                className="object-cover h-8"
-                src="/assets/univision_logo.png"
+                className=" h-8 w-full object-fill rounded-none"
+                src="/assets/univision_logo_white.png"
               />
             </div>
             <h1 className="text-[#47be37] text-xl font-bold tracking-wider drop-shadow-xl gradient-text">
@@ -367,7 +367,7 @@ export default function Home() {
                     <div className="relative bg-white/20 backdrop-blur-md rounded-2xl p-3 shadow-xl border border-white/20 animate-float">
                       <Image
                         alt="Gift Image"
-                        className="object-contain w-40 h-40"
+                        className="object-contain w-72 h-72"
                         src={gifts[chosenGiftIndex].img}
                         style={{
                           maxWidth: '100%',
@@ -378,22 +378,22 @@ export default function Home() {
                     </div>
                   </div>
                 )}
-                <div className="bg-white/10 backdrop-blur-sm rounded-xl px-4 py-1.5 border border-white/20">
-                  <h2 className="text-white text-lg font-bold text-center">{gifts[chosenGiftIndex]?.name}</h2>
+                <div className="bg-white/10 backdrop-blur-sm rounded-xl px-6 py-2.5 border border-white/20">
+                  <h2 className="text-white text-2xl font-bold text-center">{gifts[chosenGiftIndex]?.name}</h2>
                 </div>
                 <div className="flex gap-3">
                   {isNext ?
                     <Button
-                      size="md"
-                      className="mt-1 bg-gradient-to-r from-[#47be37] to-[#3da857] text-white font-bold text-lg shadow-xl px-6 py-3 rounded-xl hover:scale-105 transition-transform duration-300"
+                      size="lg"
+                      className="mt-1 bg-gradient-to-r from-[#47be37] to-[#3da857] text-white font-bold text-2xl shadow-xl px-10 py-5 rounded-xl hover:scale-105 transition-transform duration-300"
                       onClick={() => { handleClose() }}
                     >
                       ҮРГЭЛЖЛҮҮЛЭХ
                     </Button>
                     :
                     <Button
-                      size="md"
-                      className="mt-1 bg-gradient-to-r from-[#47be37] to-[#3da857] text-white font-bold text-lg shadow-xl px-6 py-3 rounded-xl hover:scale-105 transition-transform duration-300 disabled:opacity-50 disabled:cursor-not-allowed animate-pulse-glow"
+                      size="lg"
+                      className="mt-1 bg-gradient-to-r from-[#47be37] to-[#3da857] text-white font-bold text-2xl shadow-xl px-10 py-5 rounded-xl hover:scale-105 transition-transform duration-300 disabled:opacity-50 disabled:cursor-not-allowed animate-pulse-glow"
                       disabled={disabled}
                       onClick={() => { getWinner(0) }}
                     >
@@ -410,11 +410,11 @@ export default function Home() {
                   <dl className="grid grid-flow-col text-center justify-center gap-1.5">
                     {number.split('').map((item, numberIndex) => (
                       <div
-                        className="relative flex items-center justify-center w-10 h-10 rounded-lg bg-gradient-to-br from-white to-gray-100 shadow-xl border-2 border-[#47be37] transform hover:scale-110 transition-transform duration-300"
+                        className="relative flex items-center justify-center w-12 h-12 rounded-lg bg-gradient-to-br from-white to-gray-100 shadow-xl border-2 border-[#47be37] transform hover:scale-110 transition-transform duration-300"
                         key={numberIndex}
                       >
                         <div className="absolute inset-0 bg-[#47be37] blur-md opacity-25 rounded-lg"></div>
-                        <dd className="relative text-2xl font-black tracking-tight text-gray-900">
+                        <dd className="relative text-3xl font-black tracking-tight text-gray-900">
                           <span id={`value${winnerIndex}${numberIndex}`}>
                             {item}
                           </span>
