@@ -20,7 +20,12 @@ const DashBoardPage = () => {
   const [updateId, setUpdateId] = useState(0)
  
   const [isLookTv, setIsLookTv] = useState(false);
- 
+
+  const [univisionBg, setUnivisionBg] = useState("");
+  const [looktvBg, setLooktvBg] = useState("");
+  const univisionBgInputRef = useRef(null);
+  const looktvBgInputRef = useRef(null);
+
   const csvDataRef = useRef([]);
   const [csvCount, setCsvCount] = useState(0);
   const fileInputRef = useRef(null);
@@ -38,7 +43,44 @@ const DashBoardPage = () => {
     } else if (savedType === 'univision') {
       setIsLookTv(false);
     }
+
+    setUnivisionBg(localStorage.getItem('bg_univision') || "");
+    setLooktvBg(localStorage.getItem('bg_looktv') || "");
   }, []);
+
+  const handleBgUpload = (e, type) => {
+    const file = e.target.files[0];
+    if (!file) return;
+    if (file.size > 5 * 1024 * 1024) {
+      alert("Image size should be less than 5MB");
+      return;
+    }
+    const reader = new FileReader();
+    reader.onloadend = () => {
+      const result = reader.result;
+      if (type === 'looktv') {
+        setLooktvBg(result);
+        localStorage.setItem('bg_looktv', result);
+      } else {
+        setUnivisionBg(result);
+        localStorage.setItem('bg_univision', result);
+      }
+    };
+    reader.onerror = () => alert("Error reading image file");
+    reader.readAsDataURL(file);
+  };
+
+  const removeBg = (type) => {
+    if (type === 'looktv') {
+      setLooktvBg("");
+      localStorage.removeItem('bg_looktv');
+      if (looktvBgInputRef.current) looktvBgInputRef.current.value = "";
+    } else {
+      setUnivisionBg("");
+      localStorage.removeItem('bg_univision');
+      if (univisionBgInputRef.current) univisionBgInputRef.current.value = "";
+    }
+  };
  
   let BATCH_SIZE = 200;
  
@@ -338,6 +380,73 @@ async function addParticipants() {
           </div>
         </div>
  
+        {/* Background Management Section */}
+        <div className="bg-white rounded-lg shadow-sm border border-gray-200">
+          <div className="p-6">
+            <h3 className="font-medium text-gray-900 mb-4">Background Images</h3>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+
+              {/* Univision Background */}
+              <div className="space-y-2">
+                <label className="block text-sm font-medium text-gray-700">
+                  Univision Background
+                </label>
+                <input
+                  ref={univisionBgInputRef}
+                  onChange={(e) => handleBgUpload(e, 'univision')}
+                  type="file"
+                  accept="image/*"
+                  className="w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-primary file:text-white hover:file:bg-primary/90 cursor-pointer"
+                />
+                {univisionBg && (
+                  <div className="relative">
+                    <Image
+                      src={univisionBg}
+                      alt="Univision Background"
+                      className="w-full h-40 object-cover rounded-lg"
+                    />
+                    <button
+                      onClick={() => removeBg('univision')}
+                      className="absolute top-2 right-2 z-10 bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center text-xs hover:bg-red-600"
+                    >
+                      ×
+                    </button>
+                  </div>
+                )}
+              </div>
+
+              {/* Look TV Background */}
+              <div className="space-y-2">
+                <label className="block text-sm font-medium text-gray-700">
+                  Look TV Background
+                </label>
+                <input
+                  ref={looktvBgInputRef}
+                  onChange={(e) => handleBgUpload(e, 'looktv')}
+                  type="file"
+                  accept="image/*"
+                  className="w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-primary file:text-white hover:file:bg-primary/90 cursor-pointer"
+                />
+                {looktvBg && (
+                  <div className="relative">
+                    <Image
+                      src={looktvBg}
+                      alt="Look TV Background"
+                      className="w-full h-40 object-cover rounded-lg"
+                    />
+                    <button
+                      onClick={() => removeBg('looktv')}
+                      className="absolute top-2 right-2 z-10 bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center text-xs hover:bg-red-600"
+                    >
+                      ×
+                    </button>
+                  </div>
+                )}
+              </div>
+            </div>
+          </div>
+        </div>
+
         {/* Gift Management Section */}
         <div className="bg-white rounded-lg shadow-sm border border-gray-200">
           <div className="p-6">

@@ -24,7 +24,9 @@ export default function Home() {
   const [disabled, setDisabled] = useState(false);
   const [isNext, setIsNext] = useState(false);
   const [isLookTv, setIsLookTv] = useState(false);
- 
+  const [univisionBg, setUnivisionBg] = useState("/assets/unv_background.png");
+  const [looktvBg, setLooktvBg] = useState("/assets/looktv_background.webp");
+
   let realNumber = "";
   const ticketsConst = useRef([]);
  
@@ -44,7 +46,12 @@ export default function Home() {
     } else if (savedType === 'univision') {
       setIsLookTv(false);
     }
- 
+
+    const savedUnvBg = localStorage.getItem('bg_univision');
+    if (savedUnvBg) setUnivisionBg(savedUnvBg);
+    const savedLookBg = localStorage.getItem('bg_looktv');
+    if (savedLookBg) setLooktvBg(savedLookBg);
+
     fetchGifts();
     fetchTickets();
  
@@ -229,7 +236,7 @@ export default function Home() {
       `}</style>
  
      {isLookTv === true ? (
-      <div className="relative flex flex-col min-h-screen h-screen p-4 gap-y-3 overflow-hidden bg-center bg-no-repeat" style={{ backgroundImage: "url('/assets/looktv_background.png')", backgroundSize: "100% 100%" }}>
+      <div className="relative flex flex-col min-h-screen h-screen p-4 gap-y-3 overflow-hidden bg-center bg-no-repeat" style={{ backgroundImage: `url('${looktvBg}')`, backgroundSize: "100% 100%" }}>
         <div className="absolute inset-0 overflow-hidden pointer-events-none opacity-15">
           <div className="absolute top-10 left-10 w-40 h-40 bg-[#00b7b1] rounded-full blur-3xl"></div>
           <div className="absolute bottom-10 right-10 w-60 h-60 bg-[#00b7b1] rounded-full blur-3xl"></div>
@@ -338,7 +345,7 @@ export default function Home() {
         </Modal>
       </div>
      ) : (
-      <div className="relative flex flex-col min-h-screen h-screen p-4 gap-y-3 overflow-hidden bg-center bg-no-repeat" style={{ backgroundImage: "url('/assets/unv_background.png')", backgroundSize: "100% 100%" }}>
+      <div className="relative flex flex-col min-h-screen h-screen p-4 gap-y-3 overflow-hidden bg-center bg-no-repeat" style={{ backgroundImage: `url('${univisionBg}')`, backgroundSize: "100% 100%" }}>
         <div className="absolute inset-0 overflow-hidden pointer-events-none opacity-15">
           <div className="absolute top-10 left-10 w-40 h-40 bg-[#47be37] rounded-full blur-3xl"></div>
           <div className="absolute bottom-10 right-10 w-60 h-60 bg-[#47be37] rounded-full blur-3xl"></div>
