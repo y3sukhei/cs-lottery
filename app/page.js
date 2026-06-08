@@ -252,7 +252,7 @@ export default function Home() {
               />
             </div>
             <h1 className="text-[#00b7b1] text-xl font-bold tracking-wider drop-shadow-xl gradient-text">
-              {new Date().toLocaleString('en-US', { month: 'long' }).toUpperCase()} GIVEAWAY
+              GIVEAWAY
             </h1>
           </div>
           <div className="flex flex-row items-center justify-center gap-x-1 w-full max-w-6xl px-4">
