@@ -229,7 +229,7 @@ export default function Home() {
       `}</style>
  
      {isLookTv === true ? (
-      <div className="relative flex flex-col bg-gradient-to-br from-[#0a0d2e] via-[#0f123f] to-[#1a1f5c] min-h-screen h-screen p-4 gap-y-3 overflow-hidden">
+      <div className="relative flex flex-col min-h-screen h-screen p-4 gap-y-3 overflow-hidden bg-center bg-no-repeat" style={{ backgroundImage: "url('/assets/looktv_background.png')", backgroundSize: "100% 100%" }}>
         <div className="absolute inset-0 overflow-hidden pointer-events-none opacity-15">
           <div className="absolute top-10 left-10 w-40 h-40 bg-[#00b7b1] rounded-full blur-3xl"></div>
           <div className="absolute bottom-10 right-10 w-60 h-60 bg-[#00b7b1] rounded-full blur-3xl"></div>
@@ -240,7 +240,7 @@ export default function Home() {
             <div className="bg-white/10 backdrop-blur-sm rounded-xl p-2 shadow-xl">
               <Image
                 alt="Look TV Logo"
-                className="object-cover h-8"
+                className=" h-8 w-full object-fill rounded-none"
                 src="/assets/looktv_logo.png"
               />
             </div>
@@ -257,7 +257,7 @@ export default function Home() {
                     <div className="relative bg-white/10 backdrop-blur-md rounded-2xl p-3 shadow-xl border border-white/20 animate-float">
                       <Image
                         alt="Gift Image"
-                        className="object-contain w-40 h-40"
+                        className="object-contain w-72 h-72"
                         src={gifts[chosenGiftIndex].img}
                         style={{
                           maxWidth: '100%',
@@ -268,15 +268,15 @@ export default function Home() {
                     </div>
                   </div>
                 )}
-                <div className="bg-white/10 backdrop-blur-sm rounded-xl px-4 py-1.5 border border-white/20">
-                  <h2 className="text-white text-lg font-bold text-center">{gifts[chosenGiftIndex]?.name}</h2>
+                <div className="bg-white/10 backdrop-blur-sm rounded-xl px-6 py-2.5 border border-white/20">
+                  <h2 className="text-white text-2xl font-bold text-center">{gifts[chosenGiftIndex]?.name}</h2>
                 </div>
  
                 <div className="flex gap-3">
                   {isNext ?
                     <Button
                       size="md"
-                      className="mt-1 bg-gradient-to-r from-[#00b7b1] to-[#00d4cd] text-white font-bold text-lg shadow-xl px-6 py-3 rounded-xl hover:scale-105 transition-transform duration-300"
+                      className="mt-1 bg-gradient-to-r from-[#00b7b1] to-[#00d4cd] text-white font-bold text-2xl shadow-xl px-10 py-5 rounded-xl hover:scale-105 transition-transform duration-300"
                       onClick={() => { handleClose() }}
                     >
                       ҮРГЭЛЖЛҮҮЛЭХ
@@ -284,7 +284,7 @@ export default function Home() {
                     :
                     <Button
                       size="md"
-                      className="mt-1 bg-gradient-to-r from-[#00b7b1] to-[#00d4cd] text-white font-bold text-lg shadow-xl px-6 py-3 rounded-xl hover:scale-105 transition-transform duration-300 disabled:opacity-50 disabled:cursor-not-allowed animate-pulse-glow"
+                      className="mt-1 bg-gradient-to-r from-[#00b7b1] to-[#00d4cd] text-white font-bold text-2xl shadow-xl px-10 py-5 rounded-xl hover:scale-105 transition-transform duration-300 disabled:opacity-50 disabled:cursor-not-allowed animate-pulse-glow"
                       disabled={disabled}
                       onClick={() => { getWinner(0) }}
                     >
