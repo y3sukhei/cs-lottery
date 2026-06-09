@@ -25,7 +25,7 @@ export default function Home() {
   const [isNext, setIsNext] = useState(false);
   const [isLookTv, setIsLookTv] = useState(false);
   const [univisionBg, setUnivisionBg] = useState("/assets/unv_background.png");
-  const [looktvBg, setLooktvBg] = useState("/assets/looktv_background.webp");
+  const [looktvBg, setLooktvBg] = useState("/assets/looktv_background.png");
 
   let realNumber = "";
   const ticketsConst = useRef([]);
